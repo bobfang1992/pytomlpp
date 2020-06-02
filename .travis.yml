@@ -10,6 +10,7 @@ addons:
       - cmake
 script:
   - python --version
+  - python3 --version
   - which python
   - export CC=gcc-8
   - export CXX=g++-8
