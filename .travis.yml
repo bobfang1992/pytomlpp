@@ -28,7 +28,7 @@ script:
   - make test
   - cd ..
   # python part, run pytest with python3.7
-  - python3.7 -m pip install setuptools pytest
+  - python3.7 -m pip install --user --upgrade pip wheel setuptools pytest
   - python3.7 setup.py build 
   - python3.7 setup.py install
   - python3.7 -m pytest
