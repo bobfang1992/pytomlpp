@@ -30,9 +30,3 @@ script:
   - cmake ..
   - make -j4
   - make test
-
-  # python part, run pytest
-  # TODO: this is using python 3.4 (default on Ubuntu at this moment), find a way to use python 3.7? I did spent some time to try this but seems hard.
-  - python3.7 -m venv py37-venv
-  - source py37-venv/bin/activate
-  - python3.7 -m pip install --trusted-host pypi.org --trusted-host files.pythonhosted.org setuptools pytest
