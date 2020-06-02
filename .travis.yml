@@ -8,6 +8,8 @@ addons:
       - gcc-8
       - g++-8
       - cmake
+      - python3.6-dev
+      - python3.6-venv
 script:
   - python --version
   - python3 --version
