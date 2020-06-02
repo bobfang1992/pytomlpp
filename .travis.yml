@@ -33,5 +33,5 @@ script:
 
   # python part, run pytest
   # TODO: this is using python 3.4 (default on Ubuntu at this moment), find a way to use python 3.7? I did spent some time to try this but seems hard.
-  - python3 -m pip install --user --upgrade pip setuptools pytest
+  - python3 -m pip install --user --upgrade pip setuptools pytest=4.6
   - python3 -m pytest
