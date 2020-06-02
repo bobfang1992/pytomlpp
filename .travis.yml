@@ -18,8 +18,6 @@ script:
   - python --version
   - python3 --version
   - python3.7 --version
-  - venv --version 
-  - venv3.7 --version
   - which python
   - export CC=gcc-8
   - export CXX=g++-8
@@ -30,7 +28,7 @@ script:
   - make test
   - cd ..
   # python part, run pytest with python3.7
+  - python3.7 -m pip install setuptools pytest
   - python3.7 setup.py build 
   - python3.7 setup.py install
-  - python3.7 -m pip install pytest
   - python3.7 -m pytest
