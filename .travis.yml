@@ -30,4 +30,5 @@ script:
   - cmake ..
   - make -j4
   - make test
-  - python3.7 -m pip install --user --upgrade pip setuptools pytest
+  - python3 -m pip install --user --upgrade pip setuptools pytest
+  - python3 -m pytest
