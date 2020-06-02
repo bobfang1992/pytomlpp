@@ -27,8 +27,8 @@ script:
   - make test
   - cd ..
   # python part, run pytest with python3.7
-  - wget https://bootstrap.pypa.io/get-pip.py && sudo python3.7 get-pip.py
-  - python3.7 -m pip install --upgrade pip wheel setuptools pytest
+  - curl -fsSL https://bootstrap.pypa.io/get-pip.py | $PY_CMD - --user
+  - python3.7 -m pip install --upgrade --user pip wheel setuptools pytest
   # - python3.7 setup.py build 
   # - python3.7 setup.py install
   # - python3.7 -m pytest
