@@ -27,7 +27,7 @@ script:
   - make test
   - cd ..
   # python part, run pytest with python3.7
-  - curl -fsSL https://bootstrap.pypa.io/get-pip.py | $PY_CMD - --user
+  - curl -fsSL https://bootstrap.pypa.io/get-pip.py | python3.7 - --user
   - python3.7 -m pip install --upgrade --user pip wheel setuptools pytest
   # - python3.7 setup.py build 
   # - python3.7 setup.py install
