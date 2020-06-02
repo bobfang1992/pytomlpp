@@ -1,6 +1,10 @@
 
 dist: trusty
-language: cpp
+language: python
+python:
+  - "3.6"
+  - "3.7"
+  - "3.8"
 addons:
   apt:
     sources:
@@ -10,19 +14,8 @@ addons:
       - gcc-8
       - g++-8
       - cmake
-      - python3.6-dev
-      - python3.7-dev
-      - python3.7-venv
-
 script:
   # c++ part, build and run c++ unit tests
-  - python --version
-  - python3 --version
-  - python3.7 --version
-  - pip --version
-  - which python
-  - which python3.7
-  - which pip
   - export CC=gcc-8
   - export CXX=g++-8
   - mkdir -p build
@@ -30,3 +23,7 @@ script:
   - cmake ..
   - make -j4
   - make test
+  - cd ..
+
+  # python part
+  - which python
