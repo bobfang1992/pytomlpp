@@ -8,8 +8,9 @@ addons:
       - gcc-8
       - g++-8
       - cmake
-      - python3.6
 script:
+  - python --version
+  - which python
   - export CC=gcc-8
   - export CXX=g++-8
   - mkdir -p build
