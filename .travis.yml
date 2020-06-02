@@ -3,6 +3,7 @@ language: cpp
 addons:
   apt:
     sources:
+      - deadsnake
       - ubuntu-toolchain-r-test
     packages:
       - gcc-8
