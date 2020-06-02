@@ -10,9 +10,7 @@ addons:
       - g++-8
       - cmake
       - python3.6-dev
-      - python3.6-venv
       - python3.7-dev
-      - python3.7-venv
       - python3-pip
 script:
   # c++ part, build and run c++ unit tests
