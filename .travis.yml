@@ -13,7 +13,6 @@ addons:
       - python3.6-venv
       - python3.7-dev
       - python3.7-venv
-      - python3.7-setuptools
 script:
   # c++ part, build and run c++ unit tests
   - python --version
@@ -30,6 +29,6 @@ script:
   - cd ..
   # python part, run pytest with python3.7
   - python3.7 -m pip install --upgrade pip wheel setuptools pytest
-  - python3.7 setup.py build 
-  - python3.7 setup.py install
-  - python3.7 -m pytest
+  # - python3.7 setup.py build 
+  # - python3.7 setup.py install
+  # - python3.7 -m pytest
