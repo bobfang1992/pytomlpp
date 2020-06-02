@@ -19,6 +19,7 @@ script:
   - python3.7 --version
   - pip --version
   - which python
+  - which python3.7
   - which pip
   - export CC=gcc-8
   - export CXX=g++-8
