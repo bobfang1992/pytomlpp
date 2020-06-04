@@ -1,11 +1,13 @@
 cmake_minimum_required(VERSION 2.8.12)
 cmake_policy(SET CMP0048 NEW)
 
+set (CMAKE_CXX_STANDARD 17)
+
 # main project
 project(pytomlpp VERSION 0.1.0)
 
 include_directories(include)
-include_directories(thirdparty)
+include_directories(third_party)
 add_subdirectory(pybind11)
 pybind11_add_module(pytomlpp src/pytomlpp.cpp)
 
