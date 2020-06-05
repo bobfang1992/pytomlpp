@@ -16,7 +16,6 @@ pybind11_add_module(pytomlpp src/pytomlpp.cpp)
 enable_testing()
 add_subdirectory(tests)
 add_executable(pytomlpp-test 
-    tests/test_example.cpp 
-    tests/test_example2.cpp)
+    tests/test_lib_config.cpp)
 target_link_libraries(pytomlpp-test gtest gmock gtest_main)
 add_test(pytomlpp-test pytomlpp-test)
