@@ -1,21 +1,23 @@
 cmake_minimum_required(VERSION 2.8.12)
 cmake_policy(SET CMP0048 NEW)
 
-set (CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 17)
 
-# main project
+
 project(pytomlpp VERSION 0.1.0)
-
-include_directories(include)
+include_directories(src)
 include_directories(third_party)
 add_subdirectory(pybind11)
+add_subdirectory(tests)
+
+# main project
 pybind11_add_module(pytomlpp src/pytomlpp.cpp)
 
 # tests
-
 enable_testing()
-add_subdirectory(tests)
+
 add_executable(pytomlpp-test 
     tests/test_lib_config.cpp)
 target_link_libraries(pytomlpp-test gtest gmock gtest_main)
+
 add_test(pytomlpp-test pytomlpp-test)
