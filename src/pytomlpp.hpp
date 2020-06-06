@@ -1,9 +1,13 @@
 #pragma once
+#include <chrono>
 #include <iostream>
 #include <sstream>
 
+
+#include <pybind11/chrono.h>
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
+
 
 #include <toml.hpp>
 namespace py = pybind11;
@@ -12,6 +16,18 @@ namespace pytomlpp {
 // declarations
 py::dict table_to_dict(const toml::table& t);
 py::list array_to_list(const toml::array& a);
+
+py::object toml_date_to_python_date(const toml::date& date) {
+    py::object py_date = py::module::import("datetime")
+        .attr("date")(date.year, date.month, date.day);
+    return py_date;
+}
+
+py::object toml_time_to_python_time(const toml::time& time) {
+    py::object py_time = py::module::import("datetime")
+        .attr("time")(time.hour, time.minute, time.second, time.nanosecond/1000);
+    return py_time;
+}
 
 // implementations
 py::list array_to_list(const toml::array& a) {
@@ -44,6 +60,16 @@ py::list array_to_list(const toml::array& a) {
             const toml::array* array_value = value->as_array();
             py::list array_v = array_to_list(*array_value);
             result.append(array_v);
+        } else if (value->type() == toml::node_type::date) {
+            const toml::value<toml::date>* date_value = value->as_date();
+            const toml::date date_v = date_value->get();
+            auto date = toml_date_to_python_date(date_v);
+            result.append(date);         
+        } else if (value->type() == toml::node_type::time) {
+            const toml::value<toml::time>* time_value = value->as_time();
+            const toml::time time_v = time_value->get();
+            auto time = toml_time_to_python_time(time_v);
+            result.append(time);
         }
         else {
             std::stringstream err_message;
@@ -87,6 +113,16 @@ py::dict table_to_dict(const toml::table& t) {
             const toml::array* array_value = value->as_array();
             py::list array_v = array_to_list(*array_value);
             result[key] = array_v;
+        } else if (value->type() == toml::node_type::date) {
+            const toml::value<toml::date>* date_value = value->as_date();
+            const toml::date date_v = date_value->get();
+            auto date = toml_date_to_python_date(date_v);
+            result[key] = date;
+        } else if (value->type() == toml::node_type::time) {
+            const toml::value<toml::time>* time_value = value->as_time();
+            const toml::time time_v = time_value->get();
+            auto time = toml_time_to_python_time(time_v);
+            result[key] = time;
         }
         else {
             std::stringstream err_message;
