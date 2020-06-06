@@ -12,21 +12,35 @@
 #include <toml.hpp>
 namespace py = pybind11;
 
+using namespace pybind11::literals;
+
 namespace pytomlpp {
 // declarations
 py::dict table_to_dict(const toml::table& t);
 py::list array_to_list(const toml::array& a);
 
+auto PY_DATETIME_MODULE = py::module::import("datetime");
+
 py::object toml_date_to_python_date(const toml::date& date) {
-    py::object py_date = py::module::import("datetime")
-        .attr("date")(date.year, date.month, date.day);
+    py::object py_date = PY_DATETIME_MODULE.attr("date")(date.year, date.month, date.day);
     return py_date;
 }
 
 py::object toml_time_to_python_time(const toml::time& time) {
-    py::object py_time = py::module::import("datetime")
-        .attr("time")(time.hour, time.minute, time.second, time.nanosecond/1000);
+    py::object py_time = PY_DATETIME_MODULE.attr("time")(time.hour, time.minute, time.second, time.nanosecond/1000);
     return py_time;
+}
+
+py::object toml_date_time_to_python_date_time(const toml::date_time& dt) {
+    py::object timezone = py::none();
+    if(dt.time_offset) {
+        py::object time_delta = PY_DATETIME_MODULE.attr("timedelta")("minutes"_a = dt.time_offset.value().minutes);
+        timezone = PY_DATETIME_MODULE.attr("timezone")(time_delta);
+    }
+    py::object py_date_time = py::module::import("datetime")
+        .attr("datetime")(dt.date.year, dt.date.month, dt.date.day,
+                          dt.time.hour, dt.time.minute, dt.time.second, dt.time.nanosecond/1000, "tzinfo"_a = timezone);
+    return py_date_time;
 }
 
 // implementations
@@ -70,6 +84,11 @@ py::list array_to_list(const toml::array& a) {
             const toml::time time_v = time_value->get();
             auto time = toml_time_to_python_time(time_v);
             result.append(time);
+        } else if (value->type() == toml::node_type::date_time) {
+            const toml::value<toml::date_time>* date_time_value = value->as_date_time();
+            const toml::date_time dt_v = date_time_value->get();
+            auto datetime = toml_date_time_to_python_date_time(dt_v);
+            result.append(datetime);
         }
         else {
             std::stringstream err_message;
@@ -123,6 +142,11 @@ py::dict table_to_dict(const toml::table& t) {
             const toml::time time_v = time_value->get();
             auto time = toml_time_to_python_time(time_v);
             result[key] = time;
+        } else if (value->type() == toml::node_type::date_time) {
+            const toml::value<toml::date_time>* date_time_value = value->as_date_time();
+            const toml::date_time dt_v = date_time_value->get();
+            auto datetime = toml_date_time_to_python_date_time(dt_v);
+            result[key] = datetime;
         }
         else {
             std::stringstream err_message;
