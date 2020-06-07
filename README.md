@@ -65,4 +65,4 @@ python setup.py install
 ```
 
 ## Why not pypi?
-Pypi has some rules on how to distribute pre-compiled binary for different platforms. I do not have enough experties in this area. I would love to see contribution to make this package avaliable to publish on pypi.
+Pypi has some rules on how to distribute pre-compiled binary for different platforms. I do not have enough experties in this area. I would love to see contribution to make this package avaliable on pypi.
