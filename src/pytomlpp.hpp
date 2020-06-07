@@ -95,7 +95,6 @@ py::list array_to_list(const toml::array& a) {
             std::stringstream err_message;
             err_message << "cannot convert the type of this node to proper python types: " << value->type() << std::endl;
             std::string err_message_string = err_message.str();
-            py::print(err_message_string);
             throw std::runtime_error(err_message_string);
         }
     }
@@ -153,7 +152,6 @@ py::dict table_to_dict(const toml::table& t) {
             std::stringstream err_message;
             err_message << "cannot convert the type of this node to proper python types: " << value->type() << std::endl;
             std::string err_message_string = err_message.str();
-            py::print(err_message_string);
             throw std::runtime_error(err_message_string);
         }
     }
