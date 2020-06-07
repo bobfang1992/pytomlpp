@@ -16,10 +16,15 @@ py::dict load(std::string file_name) {
     return pytomlpp::table_to_dict(tbl);
 }
 
+std::string dumps(py::dict object) {
+    return "";
+}
+
 PYBIND11_MODULE(pytomlpp, m) {
     m.doc() = "tomlplusplus python wrapper";
     m.attr("lib_version") = TPP_VERSION;
     m.def("loads", &loads);
     m.def("load", &load);
+    m.def("dumps", &dumps);
 }
 
