@@ -8,7 +8,7 @@ This is an unofficial python wrapper for tomlplusplus (https://marzer.github.io/
 Some points you may want to know before use:
 * Using `tomlplusplus` means that this module is fully compatible with TOML v1.0.0. 
 * We convert toml structure to native python data structures (dict/list etc.) when parsing, this is more inline with what `json` module does.
-* The binding is using [pybind11](https://github.com/pybind/pybind11)
+* The binding is using [pybind11](https://github.com/pybind/pybind11).
 * The project is tested using [toml-test](https://github.com/BurntSushi/toml-test), test are written in pytest and googletest.
 
 Some feature not supported yet (but I am working on...):
