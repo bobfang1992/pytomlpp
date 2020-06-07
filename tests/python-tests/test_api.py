@@ -5,8 +5,8 @@ import pathlib
 
 import pytomlpp
 
-VALUD_EXVLUDE_LIST = []
-INVALID_EXLUDE_LIST = [
+VALID_EXCLUDE_FILE = []
+INVALID_EXCLUDE_FILE = [
     'array-mixed-types-arrays-and-ints',
     'array-mixed-types-ints-and-floats',
     'array-mixed-types-strings-and-ints',
@@ -40,7 +40,7 @@ def test_keys():
 
 def test_valid_toml_files(valid_toml_files):
     for t in valid_toml_files:
-        if t.stem in VALUD_EXVLUDE_LIST:
+        if t.stem in VALID_EXCLUDE_FILE:
             continue
         print(f"parsing {t}")
         table = pytomlpp.load(str(t))
@@ -48,7 +48,7 @@ def test_valid_toml_files(valid_toml_files):
 
 def test_invalid_toml_files(invalid_toml_files):
     for t in invalid_toml_files:
-        if t.stem in INVALID_EXLUDE_LIST:
+        if t.stem in INVALID_EXCLUDE_FILE:
             print(f"skiping {t.stem}")
             continue
         print(f"parsing {t}")
