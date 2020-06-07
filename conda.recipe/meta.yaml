@@ -1,6 +1,6 @@
 package:
   name: pytomlpp
-  version: {{ environ.get('GIT_DESCRIBE_TAG', 'dev') }}
+  version: {{ '0.1.0' }}
 
 build:
   number: {{ environ.get('GIT_DESCRIBE_NUMBER', 0) }}
