@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 2.8.12)
+cmake_minimum_required(VERSION 3.16.6)
 cmake_policy(SET CMP0048 NEW)
 
 set(CMAKE_CXX_STANDARD 17)
