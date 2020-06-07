@@ -8,7 +8,7 @@ import pytomlpp
 VALUD_EXVLUDE_LIST = []
 INVALID_EXLUDE_LIST = [
     'array-mixed-types-arrays-and-ints',
-    'array-mixed-types-ints-and-floats'
+    'array-mixed-types-ints-and-floats',
     'array-mixed-types-strings-and-ints',
     'float-leading-zero',
     'float-leading-zero-neg',
@@ -49,6 +49,7 @@ def test_valid_toml_files(valid_toml_files):
 def test_invalid_toml_files(invalid_toml_files):
     for t in invalid_toml_files:
         if t.stem in INVALID_EXLUDE_LIST:
+            print(f"skiping {t.stem}")
             continue
         print(f"parsing {t}")
         with pytest.raises(RuntimeError):

@@ -158,4 +158,15 @@ py::dict table_to_dict(const toml::table& t) {
     return result;
 }
 
+toml::array py_list_to_toml_array(const py::list& list);
+toml::table py_dict_to_toml_table(const py::dict& object);
+
+toml::array py_list_to_toml_array(const py::list& list) {
+
+}
+
+toml::table py_dict_to_toml_table(const py::dict& object) {
+
+}
+
 }
