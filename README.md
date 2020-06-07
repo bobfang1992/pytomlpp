@@ -1,7 +1,7 @@
 # pytomlpp
 
 [![Build Status](https://travis-ci.com/bobfang1992/pytomlpp.svg?branch=master)](https://travis-ci.com/bobfang1992/pytomlpp)
-
+[![Conda Status](https://anaconda.org/dorafmon/pytomlpp/badges/version.svg)](https://anaconda.org/dorafmon/pytomlpp)
 
 This is an unofficial python wrapper for tomlplusplus (https://marzer.github.io/tomlplusplus/).
 
