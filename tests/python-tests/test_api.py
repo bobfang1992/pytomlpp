@@ -6,15 +6,17 @@ import pathlib
 import pytomlpp
 
 VALUD_EXVLUDE_LIST = []
-INVALID_EXLUDE_LIST = ['float-leading-zero-neg',
-                       'array-mixed-types-arrays-and-ints',
-                       'float-leading-zero-pos',
-                       'float-no-trailing-digits',
-                       'float-leading-zero',
-                       'float-no-leading-zero',
-                       'array-mixed-types-strings-and-ints',
-                       'key-single-open-bracket',
-                       'array-mixed-types-ints-and-floats']
+INVALID_EXLUDE_LIST = [
+    'array-mixed-types-arrays-and-ints',
+    'array-mixed-types-ints-and-floats'
+    'array-mixed-types-strings-and-ints',
+    'float-leading-zero',
+    'float-leading-zero-neg',
+    'float-leading-zero-pos',
+    'float-no-leading-zero',
+    'float-no-trailing-digits',
+    'key-single-open-bracket',
+]
 
 @pytest.fixture
 def valid_toml_files():
