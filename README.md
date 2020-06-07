@@ -14,3 +14,15 @@ Some feature not supported yet (but I am working on...):
 
 * `dump` and `dumps` is still in the making.
 
+# Example
+```
+In [1]: import pytomlpp                                                                                                                                                                                                                                                                            
+
+In [2]: toml_string = 'hello = "世界"'                                                                                                                                                                                                                                                             
+
+In [3]: pytomlpp.loads(toml_string)                                                                                                                                                                                                                                                                
+Out[3]: {'hello': '世界'}
+
+In [4]: type(_)                                                                                                                                                                                                                                                                                    
+Out[4]: dict
+```
