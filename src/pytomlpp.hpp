@@ -19,19 +19,20 @@ namespace pytomlpp {
 py::dict table_to_dict(const toml::table& t);
 py::list array_to_list(const toml::array& a);
 
-auto PY_DATETIME_MODULE = py::module::import("datetime");
-
 py::object toml_date_to_python_date(const toml::date& date) {
+    auto PY_DATETIME_MODULE = py::module::import("datetime");
     py::object py_date = PY_DATETIME_MODULE.attr("date")(date.year, date.month, date.day);
     return py_date;
 }
 
 py::object toml_time_to_python_time(const toml::time& time) {
+    auto PY_DATETIME_MODULE = py::module::import("datetime");
     py::object py_time = PY_DATETIME_MODULE.attr("time")(time.hour, time.minute, time.second, time.nanosecond/1000);
     return py_time;
 }
 
 py::object toml_date_time_to_python_date_time(const toml::date_time& dt) {
+    auto PY_DATETIME_MODULE = py::module::import("datetime");
     py::object timezone = py::none();
     if(dt.time_offset) {
         py::object time_delta = PY_DATETIME_MODULE.attr("timedelta")("minutes"_a = dt.time_offset.value().minutes);
