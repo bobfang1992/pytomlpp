@@ -5,7 +5,7 @@ import pathlib
 
 import pytomlpp
 
-EXCLUDE_LIST = ["empty"]
+EXCLUDE_LIST = []
 
 @pytest.fixture
 def valid_toml_files():
