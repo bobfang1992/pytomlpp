@@ -36,6 +36,6 @@ PYBIND11_MODULE(pytomlpp, m) {
     m.def("loads", &loads);
     m.def("load", &load);
     m.def("dumps", &dumps);
-    m.def("dump", &dump);
+    // m.def("dump", &dump);
 }
 
