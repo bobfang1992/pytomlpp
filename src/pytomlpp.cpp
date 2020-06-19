@@ -17,7 +17,10 @@ py::dict load(std::string file_name) {
 }
 
 std::string dumps(py::dict object) {
-    return "";
+    const auto& t = pytomlpp::py_dict_to_toml_table(object);
+    std::stringstream ss;
+    ss << t;
+    return ss.str();
 }
 
 PYBIND11_MODULE(pytomlpp, m) {

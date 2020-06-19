@@ -161,12 +161,192 @@ py::dict table_to_dict(const toml::table& t) {
 toml::array py_list_to_toml_array(const py::list& list);
 toml::table py_dict_to_toml_table(const py::dict& object);
 
-toml::array py_list_to_toml_array(const py::list& list) {
+toml::date py_date_to_toml_date(const py::handle& date) {
+    int year = date.attr("year").cast<py::int_>();
+    int month = date.attr("month").cast<py::int_>();
+    int day = date.attr("day").cast<py::int_>();
 
+    toml::date d;
+    d.year = year;
+    d.month = month;
+    d.day = day;
+
+    return d;
+}
+
+toml::time py_time_to_toml_time(const py::handle& time) {
+    int hour = time.attr("hour").cast<py::int_>();
+    int minute = time.attr("minute").cast<py::int_>();
+    int second = time.attr("second").cast<py::int_>();
+    int microsecond = time.attr("microsecond").cast<py::int_>();
+
+    toml::time t;
+    t.hour = hour;
+    t.minute = minute;
+    t.second = second;
+    t.nanosecond = microsecond * 1000;
+
+    return t;
+}
+
+toml::date_time py_datetime_to_toml_date_time(py::handle& datetime) {
+    int year = datetime.attr("year").cast<py::int_>();
+    int month = datetime.attr("month").cast<py::int_>();
+    int day = datetime.attr("day").cast<py::int_>();
+    int hour = datetime.attr("hour").cast<py::int_>();
+    int minute = datetime.attr("minute").cast<py::int_>();
+    int second = datetime.attr("second").cast<py::int_>();
+    int microsecond = datetime.attr("microsecond").cast<py::int_>();
+    
+    py::object tz_info = datetime.attr("tzinfo");
+
+    toml::date d;
+    toml::time t;
+
+    toml::date_time dt;
+
+    d.year = year;
+    d.month = month;
+    d.day = day;
+
+    t.hour = hour;
+    t.minute = minute;
+    t.second = second;
+    t.nanosecond = microsecond * 1000;
+
+    dt.date = d;
+    dt.time = t;
+
+    if(!tz_info.is_none()) {
+        toml::time_offset to;
+        py::object time_delta = tz_info.attr("utcoffset")(datetime);
+        py::object total_seconds_object = time_delta.attr("total_seconds")();
+        int total_seconds = total_seconds_object.cast<py::int_>();
+        int total_minutes = total_seconds / 60;
+        to.minutes = total_minutes;
+        dt.time_offset = to;
+    }
+    return dt;
+}
+
+toml::array py_list_to_toml_array(const py::list& list) {
+    toml::array arr;
+
+    auto PY_DATETIME_MODULE = py::module::import("datetime");
+    auto date_class = PY_DATETIME_MODULE.attr("date");
+    auto time_class = PY_DATETIME_MODULE.attr("time");
+    auto datetime_class = PY_DATETIME_MODULE.attr("datetime");
+
+    for(auto it: list) {
+        if(py::isinstance<py::str>(it)) {
+            std::string string_value = it.cast<py::str>();
+            arr.push_back(string_value);
+        } else if(py::isinstance<py::int_>(it)) {
+            int64_t int_value = it.cast<py::int_>();
+            arr.push_back(int_value);
+        } else if (py::isinstance<py::float_>(it)) {
+            double float_value = it.cast<py::float_>();
+            arr.push_back(float_value);
+        } else if (py::isinstance<py::bool_>(it)) {
+            bool bool_value = it.cast<py::bool_>();
+            arr.push_back(bool_value);
+        } else if (py::isinstance<py::dict>(it)) {
+            toml::table t = py_dict_to_toml_table(it.cast<py::dict>());
+            arr.push_back(std::move(t));
+        } else if (py::isinstance<py::list>(it)) {
+            toml::array a = py_list_to_toml_array(it.cast<py::list>());
+            arr.push_back(std::move(a));
+        } else if (py::isinstance(it, datetime_class)) {
+            // Order matters here.
+            // isinstance(datetime_obj, datetime) --> true
+            // isinstance(datetime_obj, date) --> true as well 
+            // so we need to test datetime first then date.
+            toml::date_time date_time_value = py_datetime_to_toml_date_time(it);
+            arr.push_back(date_time_value);
+        } else if (py::isinstance(it, date_class)) {
+            toml::date date_value = py_date_to_toml_date(it);
+            arr.push_back(date_value);                
+        } else if (py::isinstance(it, time_class)) {
+            toml::time time_value = py_time_to_toml_time(it);
+            arr.push_back(time_value);
+        } else {
+            std::stringstream ss;
+            ss << "not a valid type for converstion " << it << std::endl;
+            throw std::runtime_error(ss.str());
+        }
+    }
+    return arr;
 }
 
 toml::table py_dict_to_toml_table(const py::dict& object) {
+    toml::table t;
 
+    auto PY_DATETIME_MODULE = py::module::import("datetime");
+    auto date_class = PY_DATETIME_MODULE.attr("date");
+    auto time_class = PY_DATETIME_MODULE.attr("time");
+    auto datetime_class = PY_DATETIME_MODULE.attr("datetime");
+    
+    for(auto it: object) {
+        auto key = it.first;
+        auto value = it.second;
+        if(!py::isinstance<py::str>(key)) {
+            throw std::runtime_error("key must be a string...");
+        } else {
+            std::string key_string = std::string(py::str(key));
+            bool insert_ok = true;
+            if(py::isinstance<py::int_>(value)) {
+                int64_t int_value = value.cast<py::int_>();
+                auto insert = t.insert_or_assign(key_string, int_value);
+                insert_ok = insert.second;
+            } else if (py::isinstance<py::float_>(value)) {
+                double float_value = value.cast<py::float_>();
+                auto insert = t.insert_or_assign(key_string, float_value);
+                insert_ok = insert.second;
+            } else if (py::isinstance<py::str>(value)) {
+                std::string string_value = value.cast<py::str>();
+                auto insert = t.insert_or_assign(key_string, string_value);
+                insert_ok = insert.second;
+            } else if (py::isinstance<py::bool_>(value)) {
+                bool bool_value = value.cast<py::bool_>();
+                auto insert = t.insert_or_assign(key_string, bool_value);
+                insert_ok = insert.second;
+            } else if (py::isinstance<py::dict>(value)) {
+                toml::table table_value = py_dict_to_toml_table(value.cast<py::dict>());
+                auto insert = t.insert_or_assign(key_string, std::move(table_value));
+                insert_ok = insert.second;
+            } else if (py::isinstance<py::list>(value)) {
+                toml::array array_value = py_list_to_toml_array(value.cast<py::list>());
+                auto insert = t.insert_or_assign(key_string, std::move(array_value));
+                insert_ok = insert.second;
+            } else if (py::isinstance(value, datetime_class)) {
+                // Order matters here.
+                // isinstance(datetime_obj, datetime) --> true
+                // isinstance(datetime_obj, date) --> true as well 
+                // so we need to test datetime first then date.
+                toml::date_time date_time_value = py_datetime_to_toml_date_time(value);
+                auto insert = t.insert_or_assign(key_string, date_time_value);
+                insert_ok = insert.second;
+            } else if (py::isinstance(value, date_class)) {
+                toml::date date_value = py_date_to_toml_date(value);
+                auto insert = t.insert_or_assign(key_string, date_value);            
+                insert_ok = insert.second;    
+            } else if (py::isinstance(value, time_class)) {
+                toml::time time_value = py_time_to_toml_time(value);
+                auto insert = t.insert_or_assign(key_string, time_value);
+                insert_ok = insert.second;
+            } else {
+                std::stringstream ss;
+                ss << "cannot convert value " << value << " to proper toml type" << std::endl;
+                throw std::runtime_error(ss.str());
+            }
+            if(!insert_ok) {
+                std::stringstream ss;
+                ss << "cannot insert key value pair:" << key << "," << value << std::endl;
+                throw std::runtime_error(ss.str());
+            }
+        }
+    }
+    return t;
 }
 
 }
