@@ -11,10 +11,6 @@ Some points you may want to know before use:
 * The binding is using [pybind11](https://github.com/pybind/pybind11).
 * The project is tested using [toml-test](https://github.com/BurntSushi/toml-test), test are written in pytest and googletest.
 
-Some feature not supported yet (but I am working on...):
-
-* `dump` and `dumps` are still in the making.
-
 # Example
 ```
 In [1]: import pytomlpp                                                                                                                                                                                                                                                                            
@@ -26,6 +22,9 @@ Out[3]: {'hello': '世界'}
 
 In [4]: type(_)                                                                                                                                                                                                                                                                                    
 Out[4]: dict
+
+In [6]: pytomlpp.dumps({"你好": "world"})                                                                                                                 
+Out[6]: '"你好" = "world"'
 ```
 
 # Why bother?
