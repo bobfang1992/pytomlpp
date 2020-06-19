@@ -32,20 +32,23 @@ Out[4]: dict
 There are some exisitng python TOML parser on the market but from my experience they are all purely implemented in python which is a bit slow. 
 
 ```
-In [1]: import pytomlpp                                                                                                                                                                                                                                                                            
+In [1]: import pytomlpp                                                                                                                                                                                                                                                                                                  
 
-In [2]: import toml                                                                                                                                                                                                                                                                                
+In [2]: import toml                                                                                                                                                                                                                                                                                                      
 
 In [3]: def run_parser(parser_func): 
    ...:     for i in range(1000): 
    ...:         parser_func('Cargo.toml') 
-   ...:                                                                                                                                                                                                                                                                                            
+   ...:                                                                                                                                                                                                                                                                                                                  
 
-In [4]: %timeit run_parser(toml.load)                                                                                                                                                                                                                                                              
-3.27 s ± 151 ms per loop (mean ± std. dev. of 7 runs, 1 loop each)
+In [4]: %timeit run_parser(pytomlpp.load)                                                                                                                                                                                                                                                                                
+310 ms ± 56.7 ms per loop (mean ± std. dev. of 7 runs, 1 loop each)
 
-In [5]: %timeit run_parser(pytomlpp.load)                                                                                                                                                                                                                                                          
-307 ms ± 23.1 ms per loop (mean ± std. dev. of 7 runs, 1 loop each)
+In [5]: %timeit run_parser(toml.load)                                                                                                                                                                                                                                                                                    
+3.5 s ± 162 ms per loop (mean ± std. dev. of 7 runs, 1 loop each)
+
+In [6]: pytomlpp.lib_version                                                                                                                              
+Out[6]: '1.3.2'
 ```
 
 # Installing
