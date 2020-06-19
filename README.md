@@ -58,7 +58,7 @@ We recommand you to use `conda` to install this package:
 conda install -c dorafmon pytomlpp
 ```
 
-If you are not using `conda` then we please install from source:
+If you are not using `conda` then please install from source:
 
 ```
 git clone git@github.com:bobfang1992/pytomlpp.git
