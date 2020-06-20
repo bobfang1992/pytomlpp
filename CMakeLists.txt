@@ -44,6 +44,7 @@ CPMAddPackage(
   DOWNLOAD_ONLY True
 )
 add_library(tomlplusplus INTERFACE IMPORTED)
+target_compile_features(tomlplusplus INTERFACE cxx_std_17)
 target_include_directories(tomlplusplus INTERFACE "${tomlplusplus_SOURCE_DIR}/include")
 
 # ---- Add source files ----
