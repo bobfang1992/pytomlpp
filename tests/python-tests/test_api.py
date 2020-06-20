@@ -1,7 +1,13 @@
+from __future__ import print_function
+
 import pytest
 import glob
 import os
-import pathlib
+
+try:
+    import pathlib
+except ImportError:
+    import pathlib2 as pathlib
 
 import pytomlpp
 
@@ -42,15 +48,15 @@ def test_valid_toml_files(valid_toml_files):
     for t in valid_toml_files:
         if t.stem in VALID_EXCLUDE_FILE:
             continue
-        print(f"parsing {t}")
+        print("parsing", t)
         table = pytomlpp.load(str(t))
         assert type(table) == dict
 
 def test_invalid_toml_files(invalid_toml_files):
     for t in invalid_toml_files:
         if t.stem in INVALID_EXCLUDE_FILE:
-            print(f"skiping {t.stem}")
+            print("skiping", t.stem)
             continue
-        print(f"parsing {t}")
+        print("parsing", t)
         with pytest.raises(RuntimeError):
             pytomlpp.load(str(t))
