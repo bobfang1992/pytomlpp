@@ -39,11 +39,3 @@ jobs:
           packages:
             - gcc-8
             - g++-8
-            - cmake
-      install:
-        - export CC=gcc-8
-        - export CXX=g++-8
-        - cmake -B build/test -S tests
-        - cmake --build build/test -j4
-      script:
-        - ./build/test/pytomlpp-test
