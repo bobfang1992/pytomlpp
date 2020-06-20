@@ -1,6 +1,2 @@
-include cmake/*
-include include/*
-include src/*
-include CMakeLists.txt
 include LICENSE
 include VERSION
