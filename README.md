@@ -64,7 +64,7 @@ If you are not using `conda` then please install from source:
 ```
 git clone git@github.com:bobfang1992/pytomlpp.git
 cd pytomlpp
-python setup.py install
+pip install .
 ```
 
 ## Why not pypi?
