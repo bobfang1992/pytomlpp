@@ -43,10 +43,7 @@ jobs:
       install:
         - export CC=gcc-8
         - export CXX=g++-8
-        - mkdir -p build
-        - cd build
-        - cmake ..
-        - make
+        - cmake -B build/test -S tests
+        - cmake --build build/test -j4
       script:
-        - make test
-        - cd ..
+        - ./build/test/pytomlpp-test
