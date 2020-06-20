@@ -2,12 +2,6 @@ import platform
 from setuptools import setup, Extension
 
 
-def read_version():
-    """This is so that we can maintain a single version across CMake and setup.py"""
-    with open("VERSION") as f:
-        return f.readline().strip()
-
-
 class PyBind11Include:
     def __str__(self):
         import pybind11
@@ -24,7 +18,7 @@ else:
 
 setup(
     name='pytomlpp',
-    version=read_version(),
+    version='0.1.0',
     author='Bob Fang',
     author_email='bob.fang.london@gmail.com',
     description='A python wrapper for tomp++',
