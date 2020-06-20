@@ -15,9 +15,9 @@ script: pytest -vvra
 
 jobs:
   include:
-    - python: 2.7
-      env: PYABI=cp27-cp27mu
-      before_script: pip install pathlib2
+    # - python: 2.7
+    #   env: PYABI=cp27-cp27mu
+    #   before_script: pip install pathlib2
     - python: 3.5
       env: PYABI=cp35-cp35m
     - python: 3.6
