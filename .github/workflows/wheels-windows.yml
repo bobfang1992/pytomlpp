@@ -31,7 +31,7 @@ jobs:
         # Additionally, skip 32-bit Windows for now as MSVC needs seperate setup with different toolchain to do this
         # Refer: https://cibuildwheel.readthedocs.io/en/stable/cpp_standards/#windows-and-python-27
         CIBW_SKIP: cp27-* pp27-* *-win32
-        CIBW_TEST_REQUIRES: pytest
+        CIBW_BEFORE_TEST: pip install -r tests/requirements.txt
         CIBW_TEST_COMMAND: pytest {project}/tests
       run: |
         python -m cibuildwheel --output-dir dist

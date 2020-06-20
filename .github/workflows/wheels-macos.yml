@@ -29,7 +29,7 @@ jobs:
       env:
         # Skip building on Python 2.7
         CIBW_SKIP: cp27-* pp27-*
-        CIBW_TEST_REQUIRES: pytest
+        CIBW_BEFORE_TEST: pip install -r tests/requirements.txt
         CIBW_TEST_COMMAND: pytest {project}/tests
       run: |
         python -m cibuildwheel --output-dir dist
