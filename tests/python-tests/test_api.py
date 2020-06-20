@@ -27,8 +27,8 @@ INVALID_EXCLUDE_FILE = [
 ]
 
 _toml_dir = pathlib.Path(__file__).parent.parent / "toml-test" / "tests"
-valid_toml_files = (_toml_dir / "valid").glob("*.toml")
-invalid_toml_files = (_toml_dir / "invalid").glob("*.toml")
+valid_toml_files = list((_toml_dir / "valid").glob("*.toml"))
+invalid_toml_files = list((_toml_dir / "invalid").glob("*.toml"))
 if len(valid_toml_files) <= 0 or len(invalid_toml_files) <= 0:
     raise Exception("toml-test files are not present")
 
