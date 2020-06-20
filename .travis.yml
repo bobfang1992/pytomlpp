@@ -9,7 +9,7 @@ install:
   - ls wheels/
   - pip install -U pip setuptools wheel
   - pip install wheels/*.whl
-  - pip install pytest
+  - pip install -r tests/requirements.txt
 
 script: pytest -vvra
 
