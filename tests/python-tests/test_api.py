@@ -1,13 +1,15 @@
 from __future__ import print_function
 
 import pytest
-import glob
-import os
+
+import json
 
 try:
     import pathlib
 except ImportError:
     import pathlib2 as pathlib
+
+from dateutil import parser as dateutil_parser
 
 import pytomlpp
 
@@ -24,18 +26,10 @@ INVALID_EXCLUDE_FILE = [
     'key-single-open-bracket',
 ]
 
-@pytest.fixture
-def valid_toml_files():
-    current_path = os.path.dirname(__file__)
-    toml_files = glob.glob(current_path + "/../toml-test/tests/valid/*.toml")
-    return [pathlib.Path(p) for p in toml_files]
+_toml_dir = pathlib.Path(__file__).parent.parent / "toml-test" / "tests"
+valid_toml_files = (_toml_dir / "valid").glob("*.toml")
+invalid_toml_files = (_toml_dir / "invalid").glob("*.toml")
 
-@pytest.fixture
-def invalid_toml_files():
-    current_path = os.path.dirname(__file__)
-    toml_files = glob.glob(current_path + "/../toml-test/tests/invalid/*.toml")
-    return [pathlib.Path(p) for p in toml_files]
-         
 
 def test_keys():
     toml_string = "a = 3"
@@ -44,19 +38,58 @@ def test_keys():
     assert len(keys) == 1
     assert list(keys)[0] == "a"
 
-def test_valid_toml_files(valid_toml_files):
-    for t in valid_toml_files:
-        if t.stem in VALID_EXCLUDE_FILE:
-            continue
-        print("parsing", t)
-        table = pytomlpp.load(str(t))
-        assert type(table) == dict
 
-def test_invalid_toml_files(invalid_toml_files):
-    for t in invalid_toml_files:
-        if t.stem in INVALID_EXCLUDE_FILE:
-            print("skiping", t.stem)
-            continue
-        print("parsing", t)
-        with pytest.raises(RuntimeError):
-            pytomlpp.load(str(t))
+def assert_matches_json(yaml_obj, json_obj):
+    if (
+        isinstance(json_obj, dict)
+        and set(json_obj.keys()) == {"type", "value"}
+    ):
+        if json_obj["type"] == "integer":
+            assert yaml_obj == int(json_obj["value"])
+        elif json_obj["type"] == "float":
+            assert yaml_obj == float(json_obj["value"])
+        elif json_obj["type"] == "bool":
+            exp = {"true": True, "false": False}[json_obj["value"]]
+            assert yaml_obj == exp
+        elif json_obj["type"] == "string":
+            assert yaml_obj == str(json_obj["value"])
+        elif json_obj["type"] == "datetime":
+            assert yaml_obj == dateutil_parser.isoparse(json_obj["value"])
+        elif json_obj["type"] == "array":
+            assert len(yaml_obj) == len(json_obj["value"])
+            for yaml_item, json_item in zip(yaml_obj, json_obj["value"]):
+                assert_matches_json(yaml_item, json_item)
+        else:
+            raise ValueError(json_obj)
+    elif isinstance(json_obj, dict):
+        assert isinstance(yaml_obj, dict)
+        for key in json_obj:
+            assert_matches_json(yaml_obj[key], json_obj[key])
+    elif isinstance(json_obj, list):
+        assert isinstance(yaml_obj, list)
+        assert len(yaml_obj) == len(json_obj)
+        for yaml_item, json_item in zip(yaml_obj, json_obj):
+            assert_matches_json(yaml_item, json_item)
+    else:
+        assert yaml_obj == json_obj
+
+
+@pytest.mark.parametrize(
+    "toml_file", [pytest.param(p, id=p.stem) for p in valid_toml_files]
+)
+def test_valid_toml_files(toml_file):
+    if toml_file.stem in VALID_EXCLUDE_FILE:
+        pytest.skip()
+    table = pytomlpp.load(str(toml_file))
+    table_json = json.loads(toml_file.with_suffix(".json").read_text())
+    assert_matches_json(table, table_json)
+
+
+@pytest.mark.parametrize(
+    "toml_file", [pytest.param(p, id=p.stem) for p in invalid_toml_files]
+)
+def test_invalid_toml_files(toml_file):
+    if toml_file.stem in INVALID_EXCLUDE_FILE:
+        pytest.skip()
+    with pytest.raises(RuntimeError):
+        pytomlpp.load(str(toml_file))
