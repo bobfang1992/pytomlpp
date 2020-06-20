@@ -3,7 +3,7 @@
 
 #include <gtest/gtest.h>
 
-#include <toml.hpp>
+#include <toml++/toml.h>
 
 using namespace std::string_view_literals;
 
