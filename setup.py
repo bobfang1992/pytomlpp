@@ -1,3 +1,4 @@
+import platform
 from setuptools import setup, Extension
 
 
