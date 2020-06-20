@@ -27,8 +27,8 @@ jobs:
 
     - name: Build wheels
       env:
-        # Skip building on Python 2.7
-        CIBW_SKIP: cp27-* pp27-*
+        # Skip building on Python 2.7 and PyPy
+        CIBW_SKIP: cp27-* pp*
         CIBW_BEFORE_TEST: pip install -r tests/requirements.txt
         CIBW_TEST_COMMAND: pytest {project}/tests
       run: |
