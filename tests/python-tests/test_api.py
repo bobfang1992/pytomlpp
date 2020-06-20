@@ -82,9 +82,11 @@ def assert_matches_json(yaml_obj, json_obj):
 def test_valid_toml_files(toml_file):
     if toml_file.stem in VALID_EXCLUDE_FILE:
         pytest.skip()
-    table = pytomlpp.load(str(toml_file))
-    table_json = json.loads(toml_file.with_suffix(".json").read_text())
-    assert_matches_json(table, table_json)
+    with open(str(toml_file), "r") as f:
+        toml_file_string = f.read()
+        table = pytomlpp.loads(toml_file_string)
+        table_json = json.loads(toml_file.with_suffix(".json").read_text())
+        assert_matches_json(table, table_json)
 
 
 @pytest.mark.parametrize(
@@ -94,4 +96,6 @@ def test_invalid_toml_files(toml_file):
     if toml_file.stem in INVALID_EXCLUDE_FILE:
         pytest.skip()
     with pytest.raises(RuntimeError):
-        pytomlpp.load(str(toml_file))
+        with open(str(toml_file), "r") as f:
+            toml_file_string = f.read()
+            pytomlpp.loads(toml_file_string)
