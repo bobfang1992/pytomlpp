@@ -1,18 +1,15 @@
-# Build and publish wheels to PyPI
-# Build runs on every push
+# Build, test and publish wheels to PyPI
+# Build and test run on every push
 # Publish runs only on a tag push
 # Note: This does not publish sdist
-name: Wheels
+name: Wheels (Linux)
 
 on: [push, pull_request]
 
 jobs:
   build:
-    name: Build wheel on ${{ matrix.os }}
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
+    name: Build wheel on Linux
+    runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@v2
@@ -28,10 +25,10 @@ jobs:
 
     - name: Build wheels
       env:
-        # Skip building on Python 2.7 on all platforms
-        # Additionally, skip 32-bit Windows for now as MSVC needs seperate setup with different toolchain to do this
-        # Refer: https://cibuildwheel.readthedocs.io/en/stable/cpp_standards/#windows-and-python-27
-        CIBW_SKIP: cp27-* pp27-* *-win32
+        # Skip building on Python 2.7
+        CIBW_SKIP: cp27-* pp27-*
+        CIBW_TEST_REQUIRES: pytest
+        CIBW_TEST_COMMAND: pytest
       run: |
         python -m cibuildwheel --output-dir dist
 
