@@ -14,6 +14,13 @@ class PyBind11Include:
         return pybind11.get_include()
 
 
+extra_compile_args = []
+if platform.system() == "Windows":
+    extra_compile_args.append('/std:c++17')
+else:
+    extra_compile_args.append('-std=c++17')
+
+
 setup(
     name='pytomlpp',
     version=read_version(),
@@ -44,7 +51,7 @@ setup(
                 'third_party',
                 PyBind11Include(),
             ],
-            extra_compile_args=['-std=c++17'],
+            extra_compile_args=extra_compile_args,
             language='c++',
         ),
     ],
