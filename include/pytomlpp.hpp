@@ -9,7 +9,7 @@
 #include <pybind11/stl.h>
 
 
-#include <toml++/toml.h>
+#include <toml.hpp>
 namespace py = pybind11;
 
 using namespace pybind11::literals;

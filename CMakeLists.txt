@@ -37,27 +37,16 @@ CPMAddPackage(
   VERSION 2.5.0
 )
 
-CPMAddPackage(
-  NAME tomlplusplus
-  GITHUB_REPOSITORY marzer/tomlplusplus
-  VERSION 1.3.0
-  DOWNLOAD_ONLY True
-)
-add_library(tomlplusplus INTERFACE IMPORTED)
-target_compile_features(tomlplusplus INTERFACE cxx_std_17)
-target_include_directories(tomlplusplus INTERFACE "${tomlplusplus_SOURCE_DIR}/include")
-
 # ---- Add source files ----
 
 # Note: globbing sources is considered bad practice as CMake's generators may not detect new files automatically.
 # Keep that in mind when changing files, or explicitly mention them here.
-file(GLOB_RECURSE headers CONFIGURE_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/include/*.hpp")
+file(GLOB_RECURSE headers CONFIGURE_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/include/*.hpp" "${CMAKE_CURRENT_SOURCE_DIR}/third_party/*.hpp")
 file(GLOB_RECURSE sources CONFIGURE_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp")
 
 # ---- Create library ----
 
 pybind11_add_module(pytomlpp ${headers} ${sources})
-target_link_libraries(pytomlpp PRIVATE tomlplusplus pybind11)
 
 set_target_properties(pytomlpp PROPERTIES
     CXX_STANDARD 17
@@ -71,6 +60,11 @@ endif()
 
 # being a cross-platform target, we enforce standards conformance on MSVC
 target_compile_options(pytomlpp PUBLIC "$<$<BOOL:${MSVC}>:/permissive->")
+
+target_include_directories(pytomlpp
+  PRIVATE
+    $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/third_party>
+)
 
 target_include_directories(pytomlpp
   PUBLIC
