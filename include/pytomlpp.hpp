@@ -33,14 +33,14 @@ py::object toml_time_to_python_time(const toml::time& time) {
 
 py::object toml_date_time_to_python_date_time(const toml::date_time& dt) {
     auto PY_DATETIME_MODULE = py::module::import("datetime");
-    py::object timezone = py::none();
+    py::object timezone_obj = py::none();
     if(dt.time_offset) {
         py::object time_delta = PY_DATETIME_MODULE.attr("timedelta")("minutes"_a = dt.time_offset.value().minutes);
-        timezone = PY_DATETIME_MODULE.attr("timezone")(time_delta);
+        timezone_obj = PY_DATETIME_MODULE.attr("timezone")(time_delta);
     }
     py::object py_date_time = py::module::import("datetime")
         .attr("datetime")(dt.date.year, dt.date.month, dt.date.day,
-                          dt.time.hour, dt.time.minute, dt.time.second, dt.time.nanosecond/1000, "tzinfo"_a = timezone);
+                          dt.time.hour, dt.time.minute, dt.time.second, dt.time.nanosecond/1000, "tzinfo"_a = timezone_obj);
     return py_date_time;
 }
 
