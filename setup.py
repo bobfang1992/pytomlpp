@@ -17,26 +17,6 @@ else:
 
 
 setup(
-    name='pytomlpp',
-    version='0.1.0',
-    author='Bob Fang',
-    author_email='bob.fang.london@gmail.com',
-    description='A python wrapper for tomp++',
-    long_description=open("README.md", encoding="utf-8").read(),
-    long_description_content_type='text/markdown',
-    classifiers=[
-        "Development Status :: 3 - Alpha",
-        "Operating System :: OS Independent",
-        "Programming Language :: Python",
-        "Programming Language :: Python :: 3",
-        "Programming Language :: Python :: 3.7",
-        "Programming Language :: Python :: 3.8",
-        "Intended Audience :: Developers",
-        "License :: OSI Approved :: MIT License",
-        "Natural Language :: English",
-        "Topic :: Utilities",
-    ],
-    keywords='toml parser serilization deserialization serdes',
     ext_modules=[
         Extension(
             'pytomlpp',
@@ -50,6 +30,4 @@ setup(
             language='c++',
         ),
     ],
-    setup_requires=['pybind11~=2.5'],
-    zip_safe=False,
 )
