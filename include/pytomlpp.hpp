@@ -16,6 +16,29 @@ namespace py = pybind11;
 using namespace pybind11::literals;
 
 namespace pytomlpp {
+
+struct DecodeError: public std::exception {
+    std::string err_message;
+    
+    DecodeError(const std::string& message) : err_message(message) {}
+
+    const char* what() const noexcept override
+    {
+        return err_message.c_str();
+    }
+};
+
+struct EncodeError: public std::exception {
+    std::string err_message;
+    
+    EncodeError(const std::string& message) : err_message(message) {}
+
+    const char* what() const noexcept override 
+    {
+        return err_message.c_str();
+    }
+};
+
 // declarations
 py::dict table_to_dict(const toml::table& t);
 py::list array_to_list(const toml::array& a);
@@ -96,7 +119,7 @@ py::list array_to_list(const toml::array& a) {
             std::stringstream err_message;
             err_message << "cannot convert the type of this node to proper python types: " << value->type() << std::endl;
             std::string err_message_string = err_message.str();
-            throw std::runtime_error(err_message_string);
+            throw DecodeError(err_message_string);
         }
     }
     return result;
@@ -153,7 +176,7 @@ py::dict table_to_dict(const toml::table& t) {
             std::stringstream err_message;
             err_message << "cannot convert the type of this node to proper python types: " << value->type() << std::endl;
             std::string err_message_string = err_message.str();
-            throw std::runtime_error(err_message_string);
+            throw DecodeError(err_message_string);
         }
     }
     return result;
@@ -273,7 +296,7 @@ toml::array py_list_to_toml_array(const py::list& list) {
         } else {
             std::stringstream ss;
             ss << "not a valid type for converstion " << it << std::endl;
-            throw std::runtime_error(ss.str());
+            throw EncodeError(ss.str());
         }
     }
     return arr;
@@ -291,7 +314,7 @@ toml::table py_dict_to_toml_table(const py::dict& object) {
         auto key = it.first;
         auto value = it.second;
         if(!py::isinstance<py::str>(key)) {
-            throw std::runtime_error("key must be a string...");
+            throw EncodeError("key must be a string...");
         } else {
             std::string key_string = std::string(py::str(key));
             bool insert_ok = true;
@@ -338,12 +361,12 @@ toml::table py_dict_to_toml_table(const py::dict& object) {
             } else {
                 std::stringstream ss;
                 ss << "cannot convert value " << value << " to proper toml type" << std::endl;
-                throw std::runtime_error(ss.str());
+                throw EncodeError(ss.str());
             }
             if(!insert_ok) {
                 std::stringstream ss;
                 ss << "cannot insert key value pair:" << key << "," << value << std::endl;
-                throw std::runtime_error(ss.str());
+                throw EncodeError(ss.str());
             }
         }
     }
