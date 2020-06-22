@@ -8,7 +8,8 @@
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
 
-
+#include <optional.hpp>
+#define TOML_OPTIONAL_TYPE tl::optional
 #include <toml.hpp>
 namespace py = pybind11;
 
