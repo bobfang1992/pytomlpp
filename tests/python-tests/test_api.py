@@ -95,7 +95,7 @@ def test_valid_toml_files(toml_file):
 def test_invalid_toml_files(toml_file):
     if toml_file.stem in INVALID_EXCLUDE_FILE:
         pytest.skip()
-    with pytest.raises(RuntimeError):
+    with pytest.raises(pytomlpp.DecodeError):
         with open(str(toml_file), "r") as f:
             toml_file_string = f.read()
             pytomlpp.loads(toml_file_string)
