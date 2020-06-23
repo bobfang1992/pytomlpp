@@ -86,7 +86,14 @@ jobs:
       
       - name: conda build
         shell: bash -l {0}
-        run: conda build . -c conda-forge --output-folder ./dist 
+        run: conda build . -c conda-forge --output-folder ./dist-conda
+      
+      - uses: actions/upload-artifact@v2
+        # All files are uploaded to the same location. Same-name files will be
+        # overwritten (fine for wheels, where same-name should mean same-data)
+        with:
+          name: dist-conda
+          path: ./dist-conda
 
   publish:
     runs-on: ubuntu-latest
