@@ -92,8 +92,8 @@ jobs:
         # All files are uploaded to the same location. Same-name files will be
         # overwritten (fine for wheels, where same-name should mean same-data)
         with:
-          name: dist-conda
-          path: ./dist-conda
+          name: dist-conda-${{ matrix.os }}-${{ matrix.python-version }}
+          path: ./dist-conda-${{ matrix.os }}-${{ matrix.python-version }}
 
   publish:
     runs-on: ubuntu-latest
