@@ -59,7 +59,7 @@ We recommand you to use `pip` to install this package:
 pip install pytomlpp
 ```
 
-You can also use `conda` to install this package, Note we only support linux 64 python 3.8 for now, I would love to provide this conda package on more python versions and platforms via conda but I have not found a way yet to automate this in the CI, if you know how to do this please contribute!
+You can also use `conda` to install this package, Note we only support linux 64 python 3.8 for now, I would love to provide this package on more python versions and platforms via conda but I have not found a way yet to automate this in the CI, if you know how to do this please contribute!
 
 ```sh
 conda install -c dorafmon pytomlpp
