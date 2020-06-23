@@ -22,7 +22,7 @@ std::string dumps(py::dict object) {
         ss << t;
         return ss.str();
     } catch (const std::runtime_error& e) {
-        throw pytomlpp::EncodeError(e.what());
+        throw py::type_error(e.what());
     }
 }
 
@@ -32,6 +32,5 @@ PYBIND11_MODULE(pytomlpp, m) {
     m.def("loads", &loads);
     m.def("dumps", &dumps);
     py::register_exception<pytomlpp::DecodeError>(m, "DecodeError");
-    py::register_exception<pytomlpp::EncodeError>(m, "EncodeError");
 }
 
