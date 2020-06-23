@@ -65,7 +65,7 @@ pip install pytomlpp
 conda install -c dorafmon pytomlpp
 ```
 
-If you are not using `conda` then please install from source:
+You can also install from source:
 
 ```
 git clone git@github.com:bobfang1992/pytomlpp.git
