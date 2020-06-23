@@ -13,10 +13,10 @@ jobs:
         include:
           - name: Build wheels on Linux
             os: ubuntu-latest
-            cibw_skip_extra: ""
           - name: Build wheels on MacOS
             os: macos-latest
-            cibw_skip_extra: ""
+          - name: Build wheels on Windows
+            os: windows-latest
 
     name: ${{ matrix.name }}
     runs-on: ${{ matrix.os }}
