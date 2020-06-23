@@ -2,6 +2,7 @@
 
 [![Build Status](https://github.com/bobfang1992/pytomlpp/workflows/Wheels/badge.svg)](https://github.com/bobfang1992/pytomlpp/actions)
 [![Conda Status](https://anaconda.org/dorafmon/pytomlpp/badges/version.svg)](https://anaconda.org/dorafmon/pytomlpp)
+[![PyPI version](https://badge.fury.io/py/pytomlpp.svg)](https://badge.fury.io/py/pytomlpp)
 [![TOML](https://raw.githubusercontent.com/marzer/tomlplusplus/master/docs/badge-TOML.svg)](https://github.com/toml-lang/toml/blob/master/versions/en/toml-v1.0.0-rc.1.md)
 
 This is an unofficial python wrapper for tomlplusplus (https://marzer.github.io/tomlplusplus/).
@@ -53,7 +54,12 @@ Out[6]: '1.3.2'
 
 # Installing
 
-We recommand you to use `conda` to install this package:
+We recommand you to use `pip` to install this package:
+```sh
+pip install pytomlpp
+```
+
+ You can also use `conda` to install this package:
 
 ```sh
 conda install -c dorafmon pytomlpp
@@ -66,6 +72,3 @@ git clone git@github.com:bobfang1992/pytomlpp.git
 cd pytomlpp
 pip install .
 ```
-
-## Why not pypi?
-Pypi has some rules on how to distribute pre-compiled binary for different platforms. I do not have enough experties in this area. I would love to see contribution to make this package avaliable on pypi.
