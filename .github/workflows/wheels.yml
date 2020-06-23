@@ -64,6 +64,25 @@ jobs:
         name: dist
         path: ./dist
 
+  conda-build:
+    name: conda-build (${{ matrix.python-version }}, ${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: ["ubuntu-latest", "macos-latest", "windows-latest"]
+        python-version: ["3.5", "3.6", "3.7", "3.8"]
+    steps:
+      - uses: goanpeca/setup-miniconda@v1
+      with:
+        auto-update-conda: true
+        python-version: ${{ matrix.python-version }}
+        miniconda-version: "latest"
+        conda-build-version: "v3.18.11"
+      - name: conda build
+        shell: bash -l {0}
+        run: conda build . -c conda-forge --output-folder ./dist 
+
   publish:
     runs-on: ubuntu-latest
     needs: [build]
@@ -78,3 +97,4 @@ jobs:
         with:
           user: __token__
           password: ${{ secrets.PYPI_TOKEN }}
+  
