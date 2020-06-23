@@ -13,8 +13,7 @@ from dateutil import parser as dateutil_parser
 
 import pytomlpp
 
-VALID_EXCLUDE_FILE = []
-INVALID_EXCLUDE_FILE = [
+TOML_0_4_SPECIFIC = [
     'array-mixed-types-arrays-and-ints',
     'array-mixed-types-ints-and-floats',
     'array-mixed-types-strings-and-ints',
@@ -27,8 +26,18 @@ INVALID_EXCLUDE_FILE = [
 ]
 
 _toml_dir = pathlib.Path(__file__).parent.parent / "toml-test" / "tests"
-valid_toml_files = list((_toml_dir / "valid").glob("*.toml"))
-invalid_toml_files = list((_toml_dir / "invalid").glob("*.toml"))
+_marks = {
+    s: (pytest.mark.skip(reason="TOML spec v0.4 specific test"),)
+    for s in TOML_0_4_SPECIFIC
+}
+valid_toml_files = [
+    pytest.param(p, id=p.stem)
+    for p in (_toml_dir / "valid").glob("*.toml")
+]
+invalid_toml_files = [
+    pytest.param(p, id=p.stem, marks=_marks.get(p.stem, ()))
+    for p in (_toml_dir / "invalid").glob("*.toml")
+]
 if len(valid_toml_files) <= 0 or len(invalid_toml_files) <= 0:
     raise Exception("toml-test files are not present")
 
@@ -76,12 +85,8 @@ def assert_matches_json(yaml_obj, json_obj):
         assert yaml_obj == json_obj
 
 
-@pytest.mark.parametrize(
-    "toml_file", [pytest.param(p, id=p.stem) for p in valid_toml_files]
-)
+@pytest.mark.parametrize("toml_file", valid_toml_files)
 def test_valid_toml_files(toml_file):
-    if toml_file.stem in VALID_EXCLUDE_FILE:
-        pytest.skip()
     with open(str(toml_file), "r") as f:
         toml_file_string = f.read()
         table = pytomlpp.loads(toml_file_string)
@@ -89,12 +94,8 @@ def test_valid_toml_files(toml_file):
         assert_matches_json(table, table_json)
 
 
-@pytest.mark.parametrize(
-    "toml_file", [pytest.param(p, id=p.stem) for p in invalid_toml_files]
-)
+@pytest.mark.parametrize("toml_file", invalid_toml_files)
 def test_invalid_toml_files(toml_file):
-    if toml_file.stem in INVALID_EXCLUDE_FILE:
-        pytest.skip()
     with pytest.raises(pytomlpp.DecodeError):
         with open(str(toml_file), "r") as f:
             toml_file_string = f.read()
