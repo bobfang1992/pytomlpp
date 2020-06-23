@@ -17,9 +17,6 @@ jobs:
           - name: Build wheels on MacOS
             os: macos-latest
             cibw_skip_extra: ""
-          - name: Build wheels on Windows
-            os: windows-latest
-            cibw_skip_extra: "*-win32"
 
     name: ${{ matrix.name }}
     runs-on: ${{ matrix.os }}
@@ -54,7 +51,7 @@ jobs:
         # Skip building on Python 2.7 and PyPy
         # Additionally, skip 32-bit Windows for now as MSVC needs seperate setup with different toolchain to do this
         # Refer: https://cibuildwheel.readthedocs.io/en/stable/cpp_standards/#windows-and-python-27
-        CIBW_SKIP: cp27-* pp* ${{ matrix.cibw_skip_extra }}
+        CIBW_SKIP: cp27-* pp* *-win32
         CIBW_BEFORE_TEST: pip install -r tests/requirements.txt
         CIBW_TEST_COMMAND: pytest {project}/tests
       run: |
