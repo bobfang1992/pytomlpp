@@ -4,6 +4,7 @@
 [![Conda Status](https://anaconda.org/dorafmon/pytomlpp/badges/version.svg)](https://anaconda.org/dorafmon/pytomlpp)
 [![PyPI version](https://badge.fury.io/py/pytomlpp.svg)](https://badge.fury.io/py/pytomlpp)
 [![TOML](https://raw.githubusercontent.com/marzer/tomlplusplus/master/docs/badge-TOML.svg)](https://github.com/toml-lang/toml/blob/master/versions/en/toml-v1.0.0-rc.1.md)
+[![PyPI version](https://badge.fury.io/py/pytomlpp.svg)](https://badge.fury.io/py/pytomlpp)
 
 This is an unofficial python wrapper for tomlplusplus (https://marzer.github.io/tomlplusplus/).
 
