@@ -78,7 +78,7 @@ jobs:
           auto-update-conda: true
           python-version: ${{ matrix.python-version }}
           miniconda-version: "latest"
-          conda-build-version: "v3.18.11"
+          conda-build-version: "3.18.11"
       - name: conda build
         shell: bash -l {0}
         run: conda build . -c conda-forge --output-folder ./dist 
