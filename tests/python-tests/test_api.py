@@ -107,5 +107,5 @@ def test_invalid_toml_files(toml_file):
 def test_invalid_encode():
     class A:
         pass
-    with pytest.raises(pytomlpp.EncodeError):
+    with pytest.raises(TypeError):
         pytomlpp.dumps({'a': A()})
