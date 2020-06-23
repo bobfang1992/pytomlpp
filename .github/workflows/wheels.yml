@@ -86,8 +86,12 @@ jobs:
       
       - name: conda build
         shell: bash -l {0}
-        run: conda build . -c conda-forge --output-folder ./dist-conda-${{ matrix.os }}-${{ matrix.python-version }}
-      
+        run: |
+          conda install anaconda-client
+          anaconda login --username dorafmon --password ${{ secrets.CONDA_PWD }}
+          conda config --set anaconda_upload yes
+          conda build . -c conda-forge --output-folder ./dist-conda-${{ matrix.os }}-${{ matrix.python-version }}
+          
       - uses: actions/upload-artifact@v2
         # All files are uploaded to the same location. Same-name files will be
         # overwritten (fine for wheels, where same-name should mean same-data)
