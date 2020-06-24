@@ -18,13 +18,9 @@ namespace pybind11 { namespace detail {
             toml::date d;
 
             if (PyDate_Check(src.ptr())) {
-                int year = src.attr("year").cast<py::int_>();
-                int month = src.attr("month").cast<py::int_>();
-                int day = src.attr("day").cast<py::int_>();
-
-                d.year = year;
-                d.month = month;
-                d.day = day;
+                d.year = PyDateTime_GET_DAY(src.ptr());
+                d.month = PyDateTime_GET_MONTH(src.ptr());
+                d.day = PyDateTime_GET_YEAR(src.ptr());
             }
             else return false;
 
@@ -32,11 +28,10 @@ namespace pybind11 { namespace detail {
             return true;
         }
 
-        static handle cast(const toml::date &date, return_value_policy /* policy */, handle /* parent */) {
-            auto PY_DATETIME_MODULE = py::module::import("datetime");
-            py::object py_date =
-                PY_DATETIME_MODULE.attr("date")(date.year, date.month, date.day);
-            return py_date;
+        static handle cast(const toml::date &src, return_value_policy /* policy */, handle /* parent */) {
+            // Lazy initialise the PyDateTime import
+            if (!PyDateTimeAPI) { PyDateTime_IMPORT; }
+            return PyDate_FromDate(src.year, src.month, src.day);
         }
         PYBIND11_TYPE_CASTER(type, _("datetime.datetime"));
     };
