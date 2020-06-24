@@ -117,12 +117,13 @@ namespace pybind11 { namespace detail {
             // Lazy initialise the PyDateTime import
             if (!PyDateTimeAPI) { PyDateTime_IMPORT; }
 
-            PyObject *timezone_obj = Py_None;
+            auto datetime_module = py::module::import("datetime");
+            py::object timezone_obj = py::none();
 
             if (src.time_offset) {
-                auto tz = src.time_offset.value();
-                auto delta = PyDelta_FromDSU(0, tz.minutes * 60, 0);
-                timezone_obj = PyTimeZone_FromOffset(delta);
+                auto minutes = src.time_offset.value().minutes;
+                auto delta = datetime_module.attr("timedelta")("minutes"_a = minutes);
+                timezone_obj = datetime_module.attr("timezone")(delta);
             }
 
             return PyDateTimeAPI->DateTime_FromDateAndTime(
@@ -133,7 +134,7 @@ namespace pybind11 { namespace detail {
                 src.time.minute,
                 src.time.second,
                 src.time.nanosecond/1000,
-                timezone_obj,
+                timezone_obj.ptr(),
                 PyDateTimeAPI->DateTimeType
             );
         }
