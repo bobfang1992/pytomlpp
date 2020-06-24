@@ -1,5 +1,3 @@
-#include <fstream> //required for toml::parse_file()
-
 #include <pytomlpp.hpp>
 
 std::string TPP_VERSION = std::to_string(TOML_LIB_MAJOR) + "." +
