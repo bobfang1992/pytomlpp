@@ -1,4 +1,5 @@
 #pragma once
+
 #include <chrono>
 #include <iostream>
 #include <sstream>
@@ -10,6 +11,9 @@
 #include <optional.hpp>
 #define TOML_OPTIONAL_TYPE tl::optional
 #include <toml.hpp>
+
+#include <pytomlpp/toml_types.hpp>
+
 namespace py = pybind11;
 
 using namespace pybind11::literals;
@@ -27,13 +31,6 @@ struct DecodeError : public std::exception {
 // declarations
 py::dict table_to_dict(const toml::table &t);
 py::list array_to_list(const toml::array &a);
-
-py::object toml_date_to_python_date(const toml::date &date) {
-  auto PY_DATETIME_MODULE = py::module::import("datetime");
-  py::object py_date =
-      PY_DATETIME_MODULE.attr("date")(date.year, date.month, date.day);
-  return py_date;
-}
 
 py::object toml_time_to_python_time(const toml::time &time) {
   auto PY_DATETIME_MODULE = py::module::import("datetime");
@@ -92,8 +89,7 @@ py::list array_to_list(const toml::array &a) {
       result.append(array_v);
     } else if (value->type() == toml::node_type::date) {
       const toml::value<toml::date> *date_value = value->as_date();
-      const toml::date date_v = date_value->get();
-      auto date = toml_date_to_python_date(date_v);
+      const toml::date date = date_value->get();
       result.append(date);
     } else if (value->type() == toml::node_type::time) {
       const toml::value<toml::time> *time_value = value->as_time();
@@ -151,8 +147,7 @@ py::dict table_to_dict(const toml::table &t) {
       result[key] = array_v;
     } else if (value->type() == toml::node_type::date) {
       const toml::value<toml::date> *date_value = value->as_date();
-      const toml::date date_v = date_value->get();
-      auto date = toml_date_to_python_date(date_v);
+      const toml::date date = date_value->get();
       result[key] = date;
     } else if (value->type() == toml::node_type::time) {
       const toml::value<toml::time> *time_value = value->as_time();
@@ -179,19 +174,6 @@ py::dict table_to_dict(const toml::table &t) {
 
 toml::array py_list_to_toml_array(const py::list &list);
 toml::table py_dict_to_toml_table(const py::dict &object);
-
-toml::date py_date_to_toml_date(const py::handle &date) {
-  int year = date.attr("year").cast<py::int_>();
-  int month = date.attr("month").cast<py::int_>();
-  int day = date.attr("day").cast<py::int_>();
-
-  toml::date d;
-  d.year = year;
-  d.month = month;
-  d.day = day;
-
-  return d;
-}
 
 toml::time py_time_to_toml_time(const py::handle &time) {
   int hour = time.attr("hour").cast<py::int_>();
@@ -283,7 +265,7 @@ toml::array py_list_to_toml_array(const py::list &list) {
       toml::date_time date_time_value = py_datetime_to_toml_date_time(it);
       arr.push_back(date_time_value);
     } else if (py::isinstance(it, date_class)) {
-      toml::date date_value = py_date_to_toml_date(it);
+      toml::date date_value = it.cast<toml::date>();
       arr.push_back(date_value);
     } else if (py::isinstance(it, time_class)) {
       toml::time time_value = py_time_to_toml_time(it);
@@ -346,7 +328,7 @@ toml::table py_dict_to_toml_table(const py::dict &object) {
         auto insert = t.insert_or_assign(key_string, date_time_value);
         insert_ok = insert.second;
       } else if (py::isinstance(value, date_class)) {
-        toml::date date_value = py_date_to_toml_date(value);
+        toml::date date_value = value.cast<toml::date>();
         auto insert = t.insert_or_assign(key_string, date_value);
         insert_ok = insert.second;
       } else if (py::isinstance(value, time_class)) {
