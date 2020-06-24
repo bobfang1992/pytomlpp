@@ -32,13 +32,6 @@ struct DecodeError : public std::exception {
 py::dict table_to_dict(const toml::table &t);
 py::list array_to_list(const toml::array &a);
 
-py::object toml_time_to_python_time(const toml::time &time) {
-  auto PY_DATETIME_MODULE = py::module::import("datetime");
-  py::object py_time = PY_DATETIME_MODULE.attr("time")(
-      time.hour, time.minute, time.second, time.nanosecond / 1000);
-  return py_time;
-}
-
 py::object toml_date_time_to_python_date_time(const toml::date_time &dt) {
   auto PY_DATETIME_MODULE = py::module::import("datetime");
   py::object timezone_obj = py::none();
@@ -93,8 +86,7 @@ py::list array_to_list(const toml::array &a) {
       result.append(date);
     } else if (value->type() == toml::node_type::time) {
       const toml::value<toml::time> *time_value = value->as_time();
-      const toml::time time_v = time_value->get();
-      auto time = toml_time_to_python_time(time_v);
+      const toml::time time = time_value->get();
       result.append(time);
     } else if (value->type() == toml::node_type::date_time) {
       const toml::value<toml::date_time> *date_time_value =
@@ -151,8 +143,7 @@ py::dict table_to_dict(const toml::table &t) {
       result[key] = date;
     } else if (value->type() == toml::node_type::time) {
       const toml::value<toml::time> *time_value = value->as_time();
-      const toml::time time_v = time_value->get();
-      auto time = toml_time_to_python_time(time_v);
+      const toml::time time = time_value->get();
       result[key] = time;
     } else if (value->type() == toml::node_type::date_time) {
       const toml::value<toml::date_time> *date_time_value =
@@ -174,21 +165,6 @@ py::dict table_to_dict(const toml::table &t) {
 
 toml::array py_list_to_toml_array(const py::list &list);
 toml::table py_dict_to_toml_table(const py::dict &object);
-
-toml::time py_time_to_toml_time(const py::handle &time) {
-  int hour = time.attr("hour").cast<py::int_>();
-  int minute = time.attr("minute").cast<py::int_>();
-  int second = time.attr("second").cast<py::int_>();
-  int microsecond = time.attr("microsecond").cast<py::int_>();
-
-  toml::time t;
-  t.hour = hour;
-  t.minute = minute;
-  t.second = second;
-  t.nanosecond = microsecond * 1000;
-
-  return t;
-}
 
 toml::date_time py_datetime_to_toml_date_time(py::handle &datetime) {
   int year = datetime.attr("year").cast<py::int_>();
@@ -268,7 +244,7 @@ toml::array py_list_to_toml_array(const py::list &list) {
       toml::date date_value = it.cast<toml::date>();
       arr.push_back(date_value);
     } else if (py::isinstance(it, time_class)) {
-      toml::time time_value = py_time_to_toml_time(it);
+      toml::time time_value = it.cast<toml::time>();
       arr.push_back(time_value);
     } else {
       std::stringstream ss;
@@ -332,7 +308,7 @@ toml::table py_dict_to_toml_table(const py::dict &object) {
         auto insert = t.insert_or_assign(key_string, date_value);
         insert_ok = insert.second;
       } else if (py::isinstance(value, time_class)) {
-        toml::time time_value = py_time_to_toml_time(value);
+        toml::time time_value = value.cast<toml::time>();
         auto insert = t.insert_or_assign(key_string, time_value);
         insert_ok = insert.second;
       } else {
