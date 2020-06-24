@@ -5,7 +5,7 @@
 namespace py = pybind11;
 
 namespace pybind11 { namespace detail {
-    // This is for casting toml::date into datetime.datetime instances
+    // This is for casting toml::date into datetime.date instances
     template <> class type_caster<toml::date> {
     public:
         typedef toml::date type;
@@ -33,6 +33,38 @@ namespace pybind11 { namespace detail {
             if (!PyDateTimeAPI) { PyDateTime_IMPORT; }
             return PyDate_FromDate(src.year, src.month, src.day);
         }
-        PYBIND11_TYPE_CASTER(type, _("datetime.datetime"));
+        PYBIND11_TYPE_CASTER(type, _("datetime.date"));
+    };
+
+    // This is for casting toml::time into datetime.time instances
+    template <> class type_caster<toml::time> {
+    public:
+        typedef toml::time type;
+        bool load(handle src, bool) {
+            // Lazy initialise the PyDateTime import
+            if (!PyDateTimeAPI) { PyDateTime_IMPORT; }
+
+            if (!src) return false;
+
+            toml::time t;
+
+            if (PyDate_Check(src.ptr())) {
+                t.hour = PyDateTime_TIME_GET_HOUR(src.ptr());
+                t.minute = PyDateTime_TIME_GET_MINUTE(src.ptr());
+                t.second = PyDateTime_TIME_GET_SECOND(src.ptr());
+                t.nanosecond = PyDateTime_TIME_GET_MICROSECOND(src.ptr()) * 1000;
+            }
+            else return false;
+
+            value = t;
+            return true;
+        }
+
+        static handle cast(const toml::time &src, return_value_policy /* policy */, handle /* parent */) {
+            // Lazy initialise the PyDateTime import
+            if (!PyDateTimeAPI) { PyDateTime_IMPORT; }
+            return PyTime_FromTime(src.hour, src.minute, src.second, src.nanosecond/1000);
+        }
+        PYBIND11_TYPE_CASTER(type, _("datetime.time"));
     };
 }} // namespace pybind11::detail
