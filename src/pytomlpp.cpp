@@ -7,30 +7,29 @@ std::string TPP_VERSION = std::to_string(TOML_LIB_MAJOR) + "." +
                           std::to_string(TOML_LIB_PATCH);
 
 py::dict loads(std::string_view toml_stirng) {
-    try {
-        auto tbl = toml::parse(toml_stirng);
-        return pytomlpp::table_to_dict(tbl);
-    } catch (const std::runtime_error& e) {
-        throw pytomlpp::DecodeError(e.what());
-    }
+  try {
+    auto tbl = toml::parse(toml_stirng);
+    return pytomlpp::table_to_dict(tbl);
+  } catch (const std::runtime_error &e) {
+    throw pytomlpp::DecodeError(e.what());
+  }
 }
 
 std::string dumps(py::dict object) {
-    try {
-        const auto& t = pytomlpp::py_dict_to_toml_table(object);
-        std::stringstream ss;
-        ss << t;
-        return ss.str();
-    } catch (const std::runtime_error& e) {
-        throw py::type_error(e.what());
-    }
+  try {
+    const auto &t = pytomlpp::py_dict_to_toml_table(object);
+    std::stringstream ss;
+    ss << t;
+    return ss.str();
+  } catch (const std::runtime_error &e) {
+    throw py::type_error(e.what());
+  }
 }
 
 PYBIND11_MODULE(pytomlpp, m) {
-    m.doc() = "tomlplusplus python wrapper";
-    m.attr("lib_version") = TPP_VERSION;
-    m.def("loads", &loads);
-    m.def("dumps", &dumps);
-    py::register_exception<pytomlpp::DecodeError>(m, "DecodeError");
+  m.doc() = "tomlplusplus python wrapper";
+  m.attr("lib_version") = TPP_VERSION;
+  m.def("loads", &loads);
+  m.def("dumps", &dumps);
+  py::register_exception<pytomlpp::DecodeError>(m, "DecodeError");
 }
-
