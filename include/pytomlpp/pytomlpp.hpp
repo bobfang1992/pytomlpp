@@ -29,11 +29,11 @@ struct DecodeError : public std::exception {
 };
 
 // declarations
-py::dict table_to_dict(const toml::table &t);
-py::list array_to_list(const toml::array &a);
+py::dict toml_table_to_py_dict(const toml::table &t);
+py::list toml_array_to_py_list(const toml::array &a);
 
 // implementations
-py::list array_to_list(const toml::array &a) {
+py::list toml_array_to_py_list(const toml::array &a) {
   py::list result;
   for (size_t i = 0; i < a.size(); i++) {
     const toml::node *value = a.get(i);
@@ -57,11 +57,11 @@ py::list array_to_list(const toml::array &a) {
       result.append(py::none());
     } else if (value->type() == toml::node_type::table) {
       const toml::table *table_value = value->as_table();
-      py::dict d = table_to_dict(*table_value);
+      py::dict d = toml_table_to_py_dict(*table_value);
       result.append(d);
     } else if (value->type() == toml::node_type::array) {
       const toml::array *array_value = value->as_array();
-      py::list array_v = array_to_list(*array_value);
+      py::list array_v = toml_array_to_py_list(*array_value);
       result.append(array_v);
     } else if (value->type() == toml::node_type::date) {
       const toml::value<toml::date> *date_value = value->as_date();
@@ -88,7 +88,7 @@ py::list array_to_list(const toml::array &a) {
   return result;
 }
 
-py::dict table_to_dict(const toml::table &t) {
+py::dict toml_table_to_py_dict(const toml::table &t) {
   py::dict result;
   for (auto it : t) {
     auto key = it.first.c_str();
@@ -113,11 +113,11 @@ py::dict table_to_dict(const toml::table &t) {
       result[key] = py::none();
     } else if (value->type() == toml::node_type::table) {
       const toml::table *table_value = value->as_table();
-      py::dict d = table_to_dict(*table_value);
+      py::dict d = toml_table_to_py_dict(*table_value);
       result[key] = d;
     } else if (value->type() == toml::node_type::array) {
       const toml::array *array_value = value->as_array();
-      py::list array_v = array_to_list(*array_value);
+      py::list array_v = toml_array_to_py_list(*array_value);
       result[key] = array_v;
     } else if (value->type() == toml::node_type::date) {
       const toml::value<toml::date> *date_value = value->as_date();

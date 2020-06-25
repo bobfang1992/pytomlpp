@@ -7,7 +7,7 @@ std::string TPP_VERSION = std::to_string(TOML_LIB_MAJOR) + "." +
 py::dict loads(std::string_view toml_stirng) {
   try {
     auto tbl = toml::parse(toml_stirng);
-    return pytomlpp::table_to_dict(tbl);
+    return pytomlpp::toml_table_to_py_dict(tbl);
   } catch (const std::runtime_error &e) {
     throw pytomlpp::DecodeError(e.what());
   }
