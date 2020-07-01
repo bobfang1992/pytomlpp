@@ -22,8 +22,19 @@ namespace pytomlpp {
 
 struct DecodeError : public std::exception {
   std::string err_message;
+  int start_line;
+  int start_col;
+  int end_line;
+  int end_col;
+  std::shared_ptr<const std::string> path;
 
   DecodeError(const std::string &message) : err_message(message) {}
+
+  DecodeError(const std::string &message, int start_line, int start_col,
+              int end_line, int end_col,
+              std::shared_ptr<const std::string> path)
+      : err_message(message), start_line(start_line), start_col(start_col),
+        end_line(end_line), end_col(end_col), path(path) {}
 
   const char *what() const noexcept override { return err_message.c_str(); }
 };
