@@ -81,20 +81,18 @@ def assert_matches_json(yaml_obj, json_obj):
 
 
 @pytest.mark.parametrize("toml_file", valid_toml_files)
-def test_valid_toml_files(toml_file):
+def test_loads_valid_toml_files(toml_file):
     with open(str(toml_file), "r") as f:
-        toml_file_string = f.read()
-        table = pytomlpp.loads(toml_file_string)
+        table = pytomlpp.load(f)
         table_json = json.loads(toml_file.with_suffix(".json").read_text())
         assert_matches_json(table, table_json)
 
 
 @pytest.mark.parametrize("toml_file", invalid_toml_files)
-def test_invalid_toml_files(toml_file):
+def test_loads_invalid_toml_files(toml_file):
     with pytest.raises(pytomlpp.DecodeError):
         with open(str(toml_file), "r") as f:
-            toml_file_string = f.read()
-            pytomlpp.loads(toml_file_string)
+            pytomlpp.load(f)
 
 
 @pytest.mark.parametrize("toml_file", valid_toml_files)
