@@ -122,6 +122,6 @@ PYBIND11_MODULE(pytomlpp, m) {
   m.def("__profiling_status__", &profiling_status);
   m.def("__clear_profiling_stats__", &clear_profiling_stats);
   m.def("__get_profiling_stats_summary__", &get_profiling_stats_summary);
-  
+
   py::register_exception<pytomlpp::DecodeError>(m, "DecodeError");
 }
