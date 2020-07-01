@@ -81,8 +81,17 @@ py::dict loads(std::string_view toml_stirng) {
       d = std::move(pytomlpp::toml_table_to_py_dict(tbl));
     }
     return d;
-  } catch (const std::runtime_error &e) {
-    throw pytomlpp::DecodeError(e.what());
+  } catch (const toml::parse_error &e) {
+    std::stringstream ss;
+    ss << e;
+    auto source_region = e.source();
+    auto s_begin = source_region.begin;
+    auto s_end = source_region.end;
+    auto path = source_region.path;
+    throw pytomlpp::DecodeError(ss.str(), static_cast<int>(s_begin.line),
+                                static_cast<int>(s_begin.column),
+                                static_cast<int>(s_end.line),
+                                static_cast<int>(s_end.column), path);
   }
 }
 
@@ -113,5 +122,6 @@ PYBIND11_MODULE(pytomlpp, m) {
   m.def("__profiling_status__", &profiling_status);
   m.def("__clear_profiling_stats__", &clear_profiling_stats);
   m.def("__get_profiling_stats_summary__", &get_profiling_stats_summary);
+  
   py::register_exception<pytomlpp::DecodeError>(m, "DecodeError");
 }
