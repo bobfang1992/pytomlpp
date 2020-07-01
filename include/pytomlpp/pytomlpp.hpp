@@ -10,7 +10,7 @@
 
 #include <optional.hpp>
 #define TOML_OPTIONAL_TYPE tl::optional
-#include <toml.hpp>
+#include <tomlplusplus/toml.hpp>
 
 #include <pytomlpp/toml_types.hpp>
 

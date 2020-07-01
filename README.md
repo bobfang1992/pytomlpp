@@ -68,7 +68,7 @@ conda install -c dorafmon pytomlpp
 You can also install from source:
 
 ```
-git clone git@github.com:bobfang1992/pytomlpp.git
+git clone git@github.com:bobfang1992/pytomlpp.git --recurse-submodules=third_party/tomlplusplus --shallow-submodules
 cd pytomlpp
 pip install .
 ```
