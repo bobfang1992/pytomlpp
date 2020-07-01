@@ -17,11 +17,6 @@ TOML_0_4_SPECIFIC = [
     'array-mixed-types-arrays-and-ints',
     'array-mixed-types-ints-and-floats',
     'array-mixed-types-strings-and-ints',
-    'float-leading-zero',
-    'float-leading-zero-neg',
-    'float-leading-zero-pos',
-    'float-no-leading-zero',
-    'float-no-trailing-digits',
     'key-single-open-bracket',
 ]
 
