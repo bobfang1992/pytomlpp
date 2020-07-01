@@ -37,15 +37,15 @@ In [1]: import pytomlpp
 
 In [2]: import toml                                                                                                                                                                                                                                                                                                      
 
-In [3]: def run_parser(parser_func): 
+In [3]: def run_parser(parser_func, toml_string): 
    ...:     for i in range(1000): 
-   ...:         parser_func('Cargo.toml') 
+   ...:         parser_func(toml_string) 
    ...:                                                                                                                                                                                                                                                                                                                  
 
-In [4]: %timeit run_parser(pytomlpp.load)                                                                                                                                                                                                                                                                                
+In [4]: %timeit run_parser(pytomlpp.loads, toml_string)                                                                                                                                                                                                                                                                                
 310 ms ± 56.7 ms per loop (mean ± std. dev. of 7 runs, 1 loop each)
 
-In [5]: %timeit run_parser(toml.load)                                                                                                                                                                                                                                                                                    
+In [5]: %timeit run_parser(toml.loads, toml_string)                                                                                                                                                                                                                                                                                    
 3.5 s ± 162 ms per loop (mean ± std. dev. of 7 runs, 1 loop each)
 
 In [6]: pytomlpp.lib_version                                                                                                                              
