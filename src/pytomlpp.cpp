@@ -111,7 +111,7 @@ std::string dumps(py::dict object) {
   }
 }
 
-PYBIND11_MODULE(pytomlpp, m) {
+PYBIND11_MODULE(_impl, m) {
   m.doc() = "tomlplusplus python wrapper";
   m.attr("lib_version") = TPP_VERSION;
   m.def("loads", &loads);

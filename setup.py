@@ -19,7 +19,7 @@ else:
 setup(
     ext_modules=[
         Extension(
-            'pytomlpp',
+            'pytomlpp._impl',
             ['src/pytomlpp.cpp'],
             include_dirs=[
                 'include',
