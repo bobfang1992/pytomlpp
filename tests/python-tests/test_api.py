@@ -45,39 +45,31 @@ def test_keys():
     assert list(keys)[0] == "a"
 
 
-def assert_matches_json(yaml_obj, json_obj):
+def value_from_json(json_obj):
     if (
         isinstance(json_obj, dict)
         and set(json_obj.keys()) == {"type", "value"}
     ):
         if json_obj["type"] == "integer":
-            assert yaml_obj == int(json_obj["value"])
+            return int(json_obj["value"])
         elif json_obj["type"] == "float":
-            assert yaml_obj == float(json_obj["value"])
+            return float(json_obj["value"])
         elif json_obj["type"] == "bool":
-            exp = {"true": True, "false": False}[json_obj["value"]]
-            assert yaml_obj == exp
+            return {"true": True, "false": False}[json_obj["value"]]
         elif json_obj["type"] == "string":
-            assert yaml_obj == str(json_obj["value"])
+            return str(json_obj["value"])
         elif json_obj["type"] == "datetime":
-            assert yaml_obj == dateutil_parser.isoparse(json_obj["value"])
+            return dateutil_parser.isoparse(json_obj["value"])
         elif json_obj["type"] == "array":
-            assert len(yaml_obj) == len(json_obj["value"])
-            for yaml_item, json_item in zip(yaml_obj, json_obj["value"]):
-                assert_matches_json(yaml_item, json_item)
+            return [value_from_json(item) for item in json_obj["value"]]
         else:
             raise ValueError(json_obj)
     elif isinstance(json_obj, dict):
-        assert isinstance(yaml_obj, dict)
-        for key in json_obj:
-            assert_matches_json(yaml_obj[key], json_obj[key])
+        return {key: value_from_json(value) for key, value in json_obj.items()}
     elif isinstance(json_obj, list):
-        assert isinstance(yaml_obj, list)
-        assert len(yaml_obj) == len(json_obj)
-        for yaml_item, json_item in zip(yaml_obj, json_obj):
-            assert_matches_json(yaml_item, json_item)
+        return [value_from_json(item) for item in json_obj]
     else:
-        assert yaml_obj == json_obj
+        return json_obj
 
 
 @pytest.mark.parametrize("toml_file", valid_toml_files)
@@ -86,7 +78,8 @@ def test_valid_toml_files(toml_file):
         toml_file_string = f.read()
         table = pytomlpp.loads(toml_file_string)
         table_json = json.loads(toml_file.with_suffix(".json").read_text())
-        assert_matches_json(table, table_json)
+        table_expected = value_from_json(table_json)
+        assert table == table_expected
 
 
 @pytest.mark.parametrize("toml_file", invalid_toml_files)
