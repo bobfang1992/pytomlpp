@@ -22,9 +22,9 @@ public:
     toml::date d;
 
     if (PyDate_Check(src.ptr())) {
-      d.year = PyDateTime_GET_DAY(src.ptr());
+      d.year = PyDateTime_GET_YEAR(src.ptr());
       d.month = PyDateTime_GET_MONTH(src.ptr());
-      d.day = PyDateTime_GET_YEAR(src.ptr());
+      d.day = PyDateTime_GET_DAY(src.ptr());
     } else
       return false;
 
@@ -99,15 +99,15 @@ public:
 
     if (PyDateTime_Check(src.ptr())) {
       toml::date d;
-      d.year = PyDateTime_GET_DAY(src.ptr());
+      d.year = PyDateTime_GET_YEAR(src.ptr());
       d.month = PyDateTime_GET_MONTH(src.ptr());
-      d.day = PyDateTime_GET_YEAR(src.ptr());
+      d.day = PyDateTime_GET_DAY(src.ptr());
 
       toml::time t;
-      t.hour = PyDateTime_TIME_GET_HOUR(src.ptr());
-      t.minute = PyDateTime_TIME_GET_MINUTE(src.ptr());
-      t.second = PyDateTime_TIME_GET_SECOND(src.ptr());
-      t.nanosecond = PyDateTime_TIME_GET_MICROSECOND(src.ptr()) * 1000;
+      t.hour = PyDateTime_DATE_GET_HOUR(src.ptr());
+      t.minute = PyDateTime_DATE_GET_MINUTE(src.ptr());
+      t.second = PyDateTime_DATE_GET_SECOND(src.ptr());
+      t.nanosecond = PyDateTime_DATE_GET_MICROSECOND(src.ptr()) * 1000;
 
       py::object tz_info = src.attr("tzinfo");
 
