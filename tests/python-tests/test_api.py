@@ -97,6 +97,18 @@ def test_invalid_toml_files(toml_file):
             pytomlpp.loads(toml_file_string)
 
 
+@pytest.mark.parametrize("toml_file", valid_toml_files)
+def test_round_trip_for_valid_toml_files(toml_file):
+    with open(str(toml_file), "r") as f:
+        text = f.read()
+    print(text.strip(), end="\n\n")
+    table = pytomlpp.loads(text)
+    print(table, end="\n\n")
+
+    text2 = pytomlpp.dumps(table)
+    print(text2, end="\n\n")
+    table2 = pytomlpp.loads(text2)
+    assert table == table2
 
 
 def test_invalid_encode():
