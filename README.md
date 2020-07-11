@@ -5,6 +5,8 @@
 [![PyPI version](https://badge.fury.io/py/pytomlpp.svg)](https://badge.fury.io/py/pytomlpp)
 [![TOML](https://raw.githubusercontent.com/marzer/tomlplusplus/master/docs/badge-TOML.svg)](https://toml.io/en/v1.0.0-rc.1)
 
+You can try this parser online [here](http://toml-parser.com).
+
 This is an unofficial python wrapper for tomlplusplus (https://marzer.github.io/tomlplusplus/).
 
 Some points you may want to know before use:
