@@ -118,7 +118,7 @@ public:
         int total_seconds = total_seconds_object.cast<py::int_>();
         int total_minutes = total_seconds / 60;
         to.minutes = total_minutes;
-        dt.time_offset = to;
+        dt.offset = to;
       }
 
       dt.date = d;
@@ -140,8 +140,8 @@ public:
     auto datetime_module = py::module::import("datetime");
     py::object timezone_obj = py::none();
 
-    if (src.time_offset) {
-      auto minutes = src.time_offset.value().minutes;
+    if (src.offset) {
+      auto minutes = src.offset.value().minutes;
       auto delta = datetime_module.attr("timedelta")("minutes"_a = minutes);
       timezone_obj = datetime_module.attr("timezone")(delta);
     }
