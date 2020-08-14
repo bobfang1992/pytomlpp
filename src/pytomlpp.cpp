@@ -1,84 +1,86 @@
-#include <chrono>
+#define TOML_IMPLEMENTATION
 
 #include <pytomlpp/pytomlpp.hpp>
+#if PYTOMLPP_PROFILING
+TOML_DISABLE_WARNINGS
+#include <chrono>
+#include <iomanip>
+#include <pybind11/iostream.h>
+TOML_ENABLE_WARNINGS
+#endif // PYTOMLPP_PROFILING
 
 namespace {
-bool ENABLE_PROFILING = false;
-
-void enable_profiling() { ENABLE_PROFILING = true; }
-
-void disable_profiling() { ENABLE_PROFILING = false; }
-
-bool profiling_status() { return ENABLE_PROFILING; }
+#if PYTOMLPP_PROFILING
+using namespace std::string_view_literals;
 
 struct profiling_stats_entry {
   long long counter;
   double total_time_in_ns;
-
-  std::string get_summary() {
-    std::stringstream ss;
-    ss << "(counter = " << counter
-       << ", total_time_in_ns = " << total_time_in_ns
-       << ", average_time_in_ns = " << (total_time_in_ns / counter) << ")";
-    return ss.str();
-  }
 };
 
-std::unordered_map<std::string, profiling_stats_entry> profiling_stats;
+std::unordered_map<std::string_view, profiling_stats_entry> profiling_stats;
 
-void clear_profiling_stats() { profiling_stats.clear(); }
-
-std::string get_profiling_stats_summary() {
-  if (!profiling_stats.empty()) {
-    std::stringstream ss;
-    ss << "Summary of Profiling:\n";
-    for (auto event : profiling_stats) {
-      ss << event.first << " : " << event.second.get_summary() << "\n";
+void print_profiling_stats() noexcept {
+  py::print("\npytomlpp profiling summary:\n-----------------------------");
+  if (profiling_stats.empty())
+    py::print("no profiling stats have been collected.");
+  else {
+    std::ostringstream oss;
+    for (const auto &[key, entry] : profiling_stats) {
+      oss << std::setw(15) << key << ": "sv
+          << " counter = "sv << std::setw(7) << entry.counter
+          << ", total_time_in_ns = "sv << std::setw(12)
+          << (long long)entry.total_time_in_ns << ", average_time_in_ns = "sv
+          << std::setw(7) << (long long)(entry.total_time_in_ns / entry.counter)
+          << "\n"sv;
     }
-    ss << "\n";
-    return ss.str();
-  } else {
-    return "profiling not enabled or no profiling stats has been collected "
-           "yet...";
+    py::print(oss.str());
   }
 }
 
 class profiling_guard {
-  std::string event;
+  profiling_stats_entry &entry;
   std::chrono::time_point<std::chrono::high_resolution_clock> start;
 
 public:
-  profiling_guard(const std::string &event) : event(event) {
-    if (profiling_status()) {
-      start = std::chrono::high_resolution_clock::now();
-    }
-  }
+  profiling_guard(profiling_stats_entry &entry) noexcept
+      : entry{entry}, start{std::chrono::high_resolution_clock::now()} {}
 
-  ~profiling_guard() {
-    if (profiling_status()) {
-      auto end = std::chrono::high_resolution_clock::now();
-      std::chrono::duration<double, std::nano> duration = end - start;
-      double execution_time_in_ns = duration.count();
-      profiling_stats_entry &event_entry = profiling_stats[event];
-      event_entry.counter += 1;
-      event_entry.total_time_in_ns += execution_time_in_ns;
-    }
+  ~profiling_guard() noexcept {
+    auto end = std::chrono::high_resolution_clock::now();
+    std::chrono::duration<double, std::nano> duration = end - start;
+    double execution_time_in_ns = duration.count();
+
+    entry.counter += 1;
+    entry.total_time_in_ns += execution_time_in_ns;
   }
 };
-} // namespace
+
+#define PROFILE_SCOPE_2(line, name)                                            \
+  static auto &profiling_stats_entry##line = profiling_stats[name];            \
+  profiling_guard profiling_guard##line { profiling_stats_entry##line }
+#define PROFILE_SCOPE_1(line, name) PROFILE_SCOPE_2(line, name)
+#define PROFILE_SCOPE(name) PROFILE_SCOPE_1(__LINE__, name)
+#else
+#define PROFILE_SCOPE(name) (void)0
+#endif // PYTOMLPP_PROFILING
 
 std::string TPP_VERSION = std::to_string(TOML_LIB_MAJOR) + "." +
                           std::to_string(TOML_LIB_MINOR) + "." +
                           std::to_string(TOML_LIB_PATCH);
 
-py::dict loads(std::string_view toml_stirng) {
+py::dict loads(std::string_view toml_string) {
   try {
-    profiling_guard guard_total("loads.total");
-    auto tbl = toml::parse(toml_stirng);
+    PROFILE_SCOPE("loads.total");
+    toml::table tbl;
+    {
+      PROFILE_SCOPE("loads.parse");
+      tbl = toml::parse(toml_string);
+    }
     py::dict d;
     {
-      profiling_guard guard_convert("loads.convert");
-      d = std::move(pytomlpp::toml_table_to_py_dict(tbl));
+      PROFILE_SCOPE("loads.convert");
+      d = pytomlpp::toml_table_to_py_dict(std::move(tbl));
     }
     return d;
   } catch (const toml::parse_error &e) {
@@ -97,11 +99,11 @@ py::dict loads(std::string_view toml_stirng) {
 
 std::string dumps(py::dict object) {
   try {
-    profiling_guard guard_total("dumps.total");
+    PROFILE_SCOPE("dumps.total");
     toml::table t;
     {
-      profiling_guard guard_convert("dumps.convert");
-      t = std::move(pytomlpp::py_dict_to_toml_table(object));
+      PROFILE_SCOPE("dumps.convert");
+      t = pytomlpp::py_dict_to_toml_table(object);
     }
     std::stringstream ss;
     ss << t;
@@ -111,17 +113,18 @@ std::string dumps(py::dict object) {
   }
 }
 
+} // namespace
+
 PYBIND11_MODULE(_impl, m) {
   m.doc() = "tomlplusplus python wrapper";
   m.attr("lib_version") = TPP_VERSION;
   m.def("loads", &loads);
   m.def("dumps", &dumps);
 
-  m.def("__enable_profiling__", &enable_profiling);
-  m.def("__disable_profiling__", &disable_profiling);
-  m.def("__profiling_status__", &profiling_status);
-  m.def("__clear_profiling_stats__", &clear_profiling_stats);
-  m.def("__get_profiling_stats_summary__", &get_profiling_stats_summary);
+#if PYTOMLPP_PROFILING
+  auto atexit = py::module::import("atexit");
+  atexit.attr("register")(py::cpp_function(print_profiling_stats));
+#endif
 
   py::register_exception<pytomlpp::DecodeError>(m, "DecodeError");
 }

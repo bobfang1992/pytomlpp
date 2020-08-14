@@ -20,7 +20,7 @@ setup(
     ext_modules=[
         Extension(
             'pytomlpp._impl',
-            ['src/pytomlpp.cpp'],
+            ['src/pytomlpp.cpp', 'src/type_casters.cpp', 'src/encoding_decoding.cpp'],
             include_dirs=[
                 'include',
                 'third_party',
