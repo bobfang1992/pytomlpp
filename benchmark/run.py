@@ -1,6 +1,7 @@
 import pytomlpp
 import toml
 import tomlkit
+import qtoml
 import timeit
 
 def benchmark(name, func, number=5000):
@@ -14,4 +15,5 @@ with open('data.toml', 'r', encoding='utf-8') as f:
 
 benchmark('pytomlpp', lambda: pytomlpp.loads(test_data))
 benchmark('toml', lambda: toml.loads(test_data))
+benchmark('qtoml', lambda: qtoml.loads(test_data))
 benchmark('tomlkit', lambda: tomlkit.parse(test_data))

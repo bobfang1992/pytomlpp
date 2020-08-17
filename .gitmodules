@@ -3,4 +3,4 @@
 	url = https://github.com/BurntSushi/toml-test.git
 [submodule "third_party/tomlplusplus"]
 	path = third_party/tomlplusplus
-	url = git@github.com:marzer/tomlplusplus.git
+	url = https://github.com/marzer/tomlplusplus.git
