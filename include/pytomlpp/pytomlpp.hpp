@@ -6,6 +6,9 @@
 #define TOML_LARGE_FILES 1
 #define TOML_HEADER_ONLY 0
 #define TOML_UNDEF_MACROS 0 // leaves some toml++'s macros for us to use
+#ifdef __APPLE__
+#define TOML_INT_CHARCONV 0
+#endif
 
 // pytomlpp config
 #ifndef PYTOMLPP_PROFILING
