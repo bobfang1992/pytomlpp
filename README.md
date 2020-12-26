@@ -7,10 +7,10 @@
 
 You can try this parser online [here](http://toml-parser.com).
 
-This is an unofficial python wrapper for tomlplusplus (https://marzer.github.io/tomlplusplus/).
+This is an unofficial python wrapper for `toml++` (https://marzer.github.io/tomlplusplus/).
 
 Some points you may want to know before use:
-* Using `tomlplusplus` means that this module is fully compatible with TOML v1.0.0. 
+* Using `toml++` means that this module is fully compatible with TOML [v1.0.0-rc.3](https://toml.io/en/v1.0.0-rc.3). 
 * We convert toml structure to native python data structures (dict/list etc.) when parsing, this is more inline with what `json` module does.
 * The binding is using [pybind11](https://github.com/pybind/pybind11).
 * The project is tested using [toml-test](https://github.com/BurntSushi/toml-test) and [pytest](https://github.com/pytest-dev/pytest).
