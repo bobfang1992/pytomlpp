@@ -95,12 +95,17 @@ toml::table py_dict_to_toml_table(const py::dict &object) {
   for (auto &&it : object) {
     auto key = it.first;
     auto value = it.second;
+
     if (!py::isinstance<py::str>(key))
       throw py::type_error("key must be a string...");
 
     std::string key_string = std::string(py::str(key));
     bool insert_ok = true;
-    if (py::isinstance<py::int_>(value)) {
+    if (py::isinstance<py::bool_>(value)) {
+      bool bool_value = value.cast<py::bool_>();
+      auto insert = t.insert_or_assign(key_string, bool_value);
+      insert_ok = insert.second;
+    } else if (py::isinstance<py::int_>(value)) {
       int64_t int_value = value.cast<py::int_>();
       auto insert = t.insert_or_assign(key_string, int_value);
       insert_ok = insert.second;
@@ -111,10 +116,6 @@ toml::table py_dict_to_toml_table(const py::dict &object) {
     } else if (py::isinstance<py::str>(value)) {
       std::string string_value = value.cast<py::str>();
       auto insert = t.insert_or_assign(key_string, string_value);
-      insert_ok = insert.second;
-    } else if (py::isinstance<py::bool_>(value)) {
-      bool bool_value = value.cast<py::bool_>();
-      auto insert = t.insert_or_assign(key_string, bool_value);
       insert_ok = insert.second;
     } else if (py::isinstance<py::dict>(value)) {
       toml::table table_value = py_dict_to_toml_table(value.cast<py::dict>());

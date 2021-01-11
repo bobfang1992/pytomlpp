@@ -5,5 +5,6 @@ __all__ = ["DecodeError", "dumps", "loads", "dump", "load"]
 from ._impl import DecodeError
 from ._impl import dumps
 from ._impl import loads
+from ._impl import lib_version
 from ._io import dump
 from ._io import load
