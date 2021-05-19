@@ -4,7 +4,7 @@
 [![Conda Status](https://anaconda.org/dorafmon/pytomlpp/badges/version.svg)](https://anaconda.org/dorafmon/pytomlpp)
 [![PyPI version](https://badge.fury.io/py/pytomlpp.svg)](https://badge.fury.io/py/pytomlpp)
 
-You can try this parser online [here](http://toml-parser.com).
+This is an unofficial python wrapper for `toml++` (https://marzer.github.io/tomlplusplus/).
 
 Some points you may want to know before use:
 * Using `toml++` means that this module is fully compatible with TOML [v1.0.0-rc.3](https://toml.io/en/v1.0.0-rc.3). 
