@@ -1,8 +1,7 @@
-# Build, test and publish wheels to PyPI
+# Build, test and publish sdist and wheels to PyPI
 # Build and test run on every push
 # Publish runs only on a tag push
-# Note: This does not publish sdist
-name: Wheels
+name: Dists
 
 on: [push, pull_request]
 
