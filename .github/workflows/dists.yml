@@ -63,6 +63,30 @@ jobs:
           name: dist
           path: ./dist
 
+  build-sdist:
+    name: Build source distribution
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          submodules: true
+
+      - uses: actions/setup-python@v2
+        name: Install Python
+        with:
+          python-version: 3.8
+
+
+      - name: Build sdist
+        run: |
+          ./setup.py sdist
+
+      - uses: actions/upload-artifact@v2
+        with:
+          name: dist
+          path: ./dist
+
   lint:
     runs-on: ubuntu-latest
 
