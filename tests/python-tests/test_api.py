@@ -87,14 +87,16 @@ def test_loads_valid_toml_files(toml_file):
         table_json = json.loads(toml_file.with_suffix(".json").read_text())
         table_expected = value_from_json(table_json)
         assert table == table_expected
-
+    table = pytomlpp.load(toml_file)
+    assert table == table_expected
 
 @pytest.mark.parametrize("toml_file", invalid_toml_files)
 def test_loads_invalid_toml_files(toml_file):
     with pytest.raises(pytomlpp.DecodeError):
         with open(str(toml_file), "r") as f:
             pytomlpp.load(f)
-
+    with pytest.raises(pytomlpp.DecodeError):
+        pytomlpp.load(toml_file)
 
 @pytest.mark.parametrize("toml_file", valid_toml_files)
 def test_round_trip_for_valid_toml_files(toml_file):
@@ -115,3 +117,9 @@ def test_invalid_encode():
         pass
     with pytest.raises(TypeError):
         pytomlpp.dumps({'a': A()})
+
+@pytest.mark.parametrize("toml_file", valid_toml_files)
+def test_decode_encode_binary(toml_file, tmp_path):
+    data = pytomlpp.load(toml_file)
+    pytomlpp.dump(data, tmp_path / "tmp.toml", mode="wb")
+    assert pytomlpp.load(tmp_path / "tmp.toml", mode="rb") == data
