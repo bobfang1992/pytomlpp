@@ -96,7 +96,7 @@ def test_loads_invalid_toml_files(toml_file):
         with open(str(toml_file), "r") as f:
             pytomlpp.load(f)
     with pytest.raises(pytomlpp.DecodeError):
-        pytomlpp.load(toml_file)
+        pytomlpp.load(str(toml_file))
 
 @pytest.mark.parametrize("toml_file", valid_toml_files)
 def test_round_trip_for_valid_toml_files(toml_file):
@@ -121,5 +121,5 @@ def test_invalid_encode():
 @pytest.mark.parametrize("toml_file", valid_toml_files)
 def test_decode_encode_binary(toml_file, tmp_path):
     data = pytomlpp.load(toml_file)
-    pytomlpp.dump(data, tmp_path / "tmp.toml", mode="wb")
-    assert pytomlpp.load(tmp_path / "tmp.toml", mode="rb") == data
+    pytomlpp.dump(data, str(tmp_path / "tmp.toml"), mode="wb")
+    assert pytomlpp.load(str(tmp_path / "tmp.toml"), mode="rb") == data
