@@ -3,7 +3,7 @@
 from . import _impl
 
 
-def dump(data, fl, mode="w", encoding="utf-8"):
+def dump(data, fl, mode="w"):
     """Serialise data to TOML.
 
     Args:
@@ -13,11 +13,10 @@ def dump(data, fl, mode="w", encoding="utf-8"):
             or a file name (str, os.Pathlike) that supports ``open``
         mode (str): opening mode. Either "w" or "wt" (text), or "wb" (binary). Defaults to "w".
             Ignored if fl supports ``write``.
-        encoding (str): encoding for binary data. Defaults to "utf-8"
     """
     data = _impl.dumps(data)
     if mode == "wb":
-        data = data.encode(encoding)
+        data = data.encode("utf-8")
     if hasattr(fl, "write"):
         fl.write(data)
         return
@@ -26,7 +25,7 @@ def dump(data, fl, mode="w", encoding="utf-8"):
 
 
 
-def load(fl, mode="r", encoding="utf-8"):
+def load(fl, mode="r"):
     """Deserialise from TOML.
 
     Args:
@@ -35,7 +34,6 @@ def load(fl, mode="r", encoding="utf-8"):
             or a file name (str, os.Pathlike) that supports ``open``
         mode (str):  opening mode. Either "r" or "rt" (text) or "rb" (binary). Defaults to "r".
             Ignored if fl supports ``read``.
-        encoding (str): encoding for binary data. Defaults to "utf-8"
 
     Returns:
         deserialised data
@@ -47,5 +45,5 @@ def load(fl, mode="r", encoding="utf-8"):
         with open(fl, mode=mode) as fh:
             data = fh.read()
     if isinstance(data, bytes):
-        return _impl.loads(data.decode(encoding))
+        return _impl.loads(data.decode("utf-8"))
     return _impl.loads(data)
