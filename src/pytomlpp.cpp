@@ -2,11 +2,9 @@
 
 #include <pytomlpp/pytomlpp.hpp>
 #if PYTOMLPP_PROFILING
-TOML_DISABLE_WARNINGS
 #include <chrono>
 #include <iomanip>
 #include <pybind11/iostream.h>
-TOML_ENABLE_WARNINGS
 #endif // PYTOMLPP_PROFILING
 
 namespace {
