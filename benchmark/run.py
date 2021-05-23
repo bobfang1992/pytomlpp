@@ -11,14 +11,12 @@ def benchmark(name, run_count, func, compare_to=None):
     print('\b'*10, end='')
     print(f'{res[0]:>4}.{res[1][:3]} s', end='')
     if compare_to is not None:
-        num = time_taken
-        denom = compare_to
+        delta = time_taken / compare_to
         relation = 'slower'
-        if num < denom:
-            num = compare_to
-            denom = compare_to
+        if delta < 1.0:
+            delta = 1.0 / delta
             relation = 'faster'
-        delta = int((num / denom) * 10.0) / 10.0
+        delta = int(delta * 10.0) / 10.0
         print(f' ({delta}x {relation})', end='')
     print('')
     return time_taken
