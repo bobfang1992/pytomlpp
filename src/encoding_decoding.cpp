@@ -1,8 +1,5 @@
 #include <pytomlpp/pytomlpp.hpp>
-
-TOML_DISABLE_WARNINGS
 #include <pybind11/stl.h>
-TOML_ENABLE_WARNINGS
 
 namespace pytomlpp {
 py::list toml_array_to_py_list(toml::array &&a) {

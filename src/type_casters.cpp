@@ -1,9 +1,5 @@
 #include <pytomlpp/pytomlpp.hpp>
-
-TOML_DISABLE_WARNINGS
-//#include <pybind11/chrono.h>
 #include <datetime.h>
-TOML_ENABLE_WARNINGS
 
 namespace {
 void lazy_init_py_date_time() noexcept {

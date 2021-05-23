@@ -1,28 +1,35 @@
 #pragma once
 
-// toml++ config
-#define TOML_OPTIONAL_TYPE tl::optional
-#define TOML_WINDOWS_COMPAT 0
-#define TOML_LARGE_FILES 1
-#define TOML_HEADER_ONLY 0
-#define TOML_UNDEF_MACROS 0 // leaves some toml++'s macros for us to use
-#ifdef __APPLE__
-#define TOML_INT_CHARCONV 0
-#endif
-
 // pytomlpp config
+#ifndef PYTOMLPP_USE_TL_OPTIONAL
+#ifdef __APPLE__
+#define PYTOMLPP_USE_TL_OPTIONAL 1
+#else
+#define PYTOMLPP_USE_TL_OPTIONAL 0
+#endif
+#endif // PYTOMLPP_USE_TL_OPTIONAL
 #ifndef PYTOMLPP_PROFILING
 #define PYTOMLPP_PROFILING 0 // see a profiling summary on shutdown
 #endif
 
+// toml++ config
+#define TOML_WINDOWS_COMPAT 0
+#define TOML_LARGE_FILES 1
+#define TOML_HEADER_ONLY 0
+#ifdef __APPLE__
+#define TOML_INT_CHARCONV 0
+#endif
+#if PYTOMLPP_USE_TL_OPTIONAL
+#define TOML_OPTIONAL_TYPE tl::optional
+#endif
+
 // common includes
-#include <tomlplusplus/include/toml++/toml_preprocessor.h>
-TOML_DISABLE_WARNINGS
+#if PYTOMLPP_USE_TL_OPTIONAL
 #include <optional.hpp>
+#endif
 #include <pybind11/pybind11.h>
 #include <sstream>
 #include <tomlplusplus/include/toml++/toml.h>
-TOML_ENABLE_WARNINGS
 
 // namespace and type forward declarations
 namespace py = pybind11;
