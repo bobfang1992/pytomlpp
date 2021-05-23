@@ -22,47 +22,47 @@ jobs:
     runs-on: ${{ matrix.os }}
 
     steps:
-    - uses: actions/checkout@v2
-      with:
-        submodules: true
+      - uses: actions/checkout@v2
+        with:
+          submodules: true
 
-    - uses: actions/setup-python@v2
-      name: Install Python
-      with:
-        python-version: 3.8
+      - uses: actions/setup-python@v2
+        name: Install Python
+        with:
+          python-version: 3.8
 
-    - name: Get pip cache dir
-      id: pip-cache
-      run: |
-        echo "::set-output name=dir::$(pip cache dir)"
+      - name: Get pip cache dir
+        id: pip-cache
+        run: |
+          echo "::set-output name=dir::$(pip cache dir)"
 
-    - name: Get pip cache
-      uses: actions/cache@v2
-      with:
-        path: ${{ steps.pip-cache.outputs.dir }}
-        key: ${{ runner.os }}-pip
+      - name: Get pip cache
+        uses: actions/cache@v2
+        with:
+          path: ${{ steps.pip-cache.outputs.dir }}
+          key: ${{ runner.os }}-pip
 
-    - name: Install cibuildwheel
-      run: |
-        python -m pip install cibuildwheel==1.7.2
+      - name: Install cibuildwheel
+        run: |
+          python -m pip install cibuildwheel==1.7.2
 
-    - name: Build wheels
-      env:
-        # Skip building on Python 2.7 and PyPy
-        # Additionally, skip 32-bit Windows for now as MSVC needs seperate setup with different toolchain to do this
-        # Refer: https://cibuildwheel.readthedocs.io/en/stable/cpp_standards/#windows-and-python-27
-        CIBW_SKIP: cp27-* pp* *-win32
-        CIBW_BEFORE_TEST: pip install -r tests/requirements.txt
-        CIBW_TEST_COMMAND: pytest {project}/tests
-      run: |
-        python -m cibuildwheel --output-dir dist
+      - name: Build wheels
+        env:
+          # Skip building on Python 2.7 and PyPy
+          # Additionally, skip 32-bit Windows for now as MSVC needs seperate setup with different toolchain to do this
+          # Refer: https://cibuildwheel.readthedocs.io/en/stable/cpp_standards/#windows-and-python-27
+          CIBW_SKIP: cp27-* pp* *-win32 cp35-*
+          CIBW_BEFORE_TEST: pip install -r tests/requirements.txt
+          CIBW_TEST_COMMAND: pytest {project}/tests
+        run: |
+          python -m cibuildwheel --output-dir dist
 
-    - uses: actions/upload-artifact@v2
-      # All files are uploaded to the same location. Same-name files will be
-      # overwritten (fine for wheels, where same-name should mean same-data)
-      with:
-        name: dist
-        path: ./dist
+      - uses: actions/upload-artifact@v2
+        # All files are uploaded to the same location. Same-name files will be
+        # overwritten (fine for wheels, where same-name should mean same-data)
+        with:
+          name: dist
+          path: ./dist
 
   lint:
     runs-on: ubuntu-latest
@@ -71,7 +71,7 @@ jobs:
       - uses: actions/checkout@v2
       - uses: DoozyX/clang-format-lint-action@v0.5
         with:
-          source: './include ./src'
+          source: "./include ./src"
 
   publish:
     runs-on: ubuntu-latest
