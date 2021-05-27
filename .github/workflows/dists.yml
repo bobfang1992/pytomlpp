@@ -1,8 +1,7 @@
-# Build, test and publish wheels to PyPI
+# Build, test and publish sdist and wheels to PyPI
 # Build and test run on every push
 # Publish runs only on a tag push
-# Note: This does not publish sdist
-name: Wheels
+name: Dists
 
 on: [push, pull_request]
 
@@ -60,6 +59,30 @@ jobs:
       - uses: actions/upload-artifact@v2
         # All files are uploaded to the same location. Same-name files will be
         # overwritten (fine for wheels, where same-name should mean same-data)
+        with:
+          name: dist
+          path: ./dist
+
+  build-sdist:
+    name: Build source distribution
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          submodules: true
+
+      - uses: actions/setup-python@v2
+        name: Install Python
+        with:
+          python-version: 3.8
+
+
+      - name: Build sdist
+        run: |
+          ./setup.py sdist
+
+      - uses: actions/upload-artifact@v2
         with:
           name: dist
           path: ./dist
