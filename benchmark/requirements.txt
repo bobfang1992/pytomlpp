@@ -2,3 +2,4 @@ pytomlpp
 toml
 tomlkit
 qtoml
+tomli
