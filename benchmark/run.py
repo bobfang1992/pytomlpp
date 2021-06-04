@@ -1,5 +1,6 @@
 import pytomlpp
 import toml
+import tomli
 import tomlkit
 import qtoml
 import timeit
@@ -27,6 +28,7 @@ def run(run_count = 5000):
         test_data = f.read()
     print(f'Parsing data.toml {run_count} times:')
     baseline = benchmark('pytomlpp', run_count, lambda: pytomlpp.loads(test_data))
+    benchmark('tomli', run_count, lambda: tomli.loads(test_data), compare_to=baseline)
     benchmark('toml', run_count, lambda: toml.loads(test_data), compare_to=baseline)
     benchmark('qtoml', run_count, lambda: qtoml.loads(test_data), compare_to=baseline)
     benchmark('tomlkit', run_count, lambda: tomlkit.parse(test_data), compare_to=baseline)
