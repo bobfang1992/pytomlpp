@@ -53,6 +53,7 @@ jobs:
           CIBW_SKIP: cp27-* pp* *-win32 cp35-*
           CIBW_BEFORE_TEST: pip install -r tests/requirements.txt
           CIBW_TEST_COMMAND: pytest {project}/tests
+          CIBW_ARCHS_MACOS: "x86_64 universal2 arm64" # build on M1 chip
         run: |
           python -m cibuildwheel --output-dir dist
 
