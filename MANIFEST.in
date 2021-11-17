@@ -1,1 +1,2 @@
+recursive-include include *
 recursive-include third_party *
