@@ -1,7 +1,6 @@
 # pytomlpp
 
 [![Build Status](https://github.com/bobfang1992/pytomlpp/workflows/Wheels/badge.svg)](https://github.com/bobfang1992/pytomlpp/actions)
-[![Conda Status](https://anaconda.org/dorafmon/pytomlpp/badges/version.svg)](https://anaconda.org/dorafmon/pytomlpp)
 [![PyPI version](https://badge.fury.io/py/pytomlpp.svg)](https://badge.fury.io/py/pytomlpp)
 
 This is an python wrapper for `toml++` (https://marzer.github.io/tomlplusplus/).
@@ -46,12 +45,6 @@ Test it for yourself using [the benchmark script](benchmark/run.py).
 We recommand you to use `pip` to install this package:
 ```sh
 pip install pytomlpp
-```
-
-You can also use `conda` to install this package, Note we only support linux 64 python 3.8 for now, I would love to provide this package on more python versions and platforms via conda but I have not found a way yet to automate this in the CI, if you know how to do this please contribute!
-
-```sh
-conda install -c dorafmon pytomlpp
 ```
 
 You can also install from source:
