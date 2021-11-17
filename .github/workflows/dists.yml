@@ -3,7 +3,13 @@
 # Publish runs only on a tag push
 name: Dists
 
-on: [push, pull_request]
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
 
 jobs:
   build:
