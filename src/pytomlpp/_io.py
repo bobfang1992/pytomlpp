@@ -1,9 +1,10 @@
 """Python wrapper for Toml++ IO methods."""
 
 from . import _impl
+from typing import Any, Dict
 
 
-def dump(data, fl, mode="w"):
+def dump(data: Any, fl: str, mode: str="w") -> None:
     """Serialise data to TOML.
 
     Args:
@@ -25,7 +26,7 @@ def dump(data, fl, mode="w"):
 
 
 
-def load(fl, mode="r"):
+def load(fl: str, mode: str="r") -> Dict[Any, Any]:
     """Deserialise from TOML.
 
     Args:
