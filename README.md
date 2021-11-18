@@ -1,6 +1,7 @@
 # pytomlpp
 
 [![Build Status](https://github.com/bobfang1992/pytomlpp/workflows/Wheels/badge.svg)](https://github.com/bobfang1992/pytomlpp/actions)
+[![Conda Status](https://anaconda.org/conda-forge/pytomlpp/badges/version.svg)](https://anaconda.org/conda-forge/pytomlpp)
 [![PyPI version](https://badge.fury.io/py/pytomlpp.svg)](https://badge.fury.io/py/pytomlpp)
 
 This is an python wrapper for `toml++` (https://marzer.github.io/tomlplusplus/).
@@ -45,6 +46,13 @@ Test it for yourself using [the benchmark script](benchmark/run.py).
 We recommand you to use `pip` to install this package:
 ```sh
 pip install pytomlpp
+```
+
+You can also use `conda` to install this package, on all common platforms & python versions.
+If you have an issue with a package from conda-forge, you can raise an issue on the [feedstock](https://github.com/conda-forge/pytomlpp-feedstock)
+
+```sh
+conda install -c conda-forge pytomlpp
 ```
 
 You can also install from source:
