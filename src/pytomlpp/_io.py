@@ -1,9 +1,26 @@
 """Python wrapper for Toml++ IO methods."""
 
+import os
+from typing import Any, BinaryIO, Dict, TextIO, Union
+
 from . import _impl
 
+FilePathOrObject = Union[str, TextIO, BinaryIO, os.PathLike]
 
-def dump(data, fl, mode="w"):
+
+def dumps(data: Dict[Any, Any]) -> str:
+    """Serialise data to TOML as string.
+
+    Args:
+        data: data to serialise
+
+    Returns:
+        serialised data
+    """
+    return _impl.dumps(data)
+
+
+def dump(data: Dict[Any, Any], fl: FilePathOrObject, mode: str = "w") -> None:
     """Serialise data to TOML.
 
     Args:
@@ -24,8 +41,19 @@ def dump(data, fl, mode="w"):
         fh.write(data)
 
 
+def loads(data: str) -> Dict[Any, Any]:
+    """Deserialise from TOML as dictionary.
 
-def load(fl, mode="r"):
+    Args:
+        data (str): data to deserialise
+
+        Returns:
+            deserialised data
+    """
+    return _impl.loads(data)
+
+
+def load(fl: FilePathOrObject, mode: str = "r") -> Dict[Any, Any]:
     """Deserialise from TOML.
 
     Args:
