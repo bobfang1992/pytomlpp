@@ -9,27 +9,24 @@ FilePathOrObject = Union[str, TextIO, BinaryIO, os.PathLike]
 
 
 def dumps(data: Dict[Any, Any]) -> str:
-    """Serialise data to TOML as string.
+    """Serialise data to TOML string.
 
     Args:
-        data: data to serialise
+        data (Dict[Any, Any]): input data
 
     Returns:
-        serialised data
+        str: seralised data
     """
     return _impl.dumps(data)
 
 
 def dump(data: Dict[Any, Any], fl: FilePathOrObject, mode: str = "w") -> None:
-    """Serialise data to TOML.
+    """Serialise data to TOML file
 
     Args:
-        data: data to serialise
-        fl (io.TextIOBase, str or os.Pathlike):
-            file-object to write to (supports ``write``)
-            or a file name (str, os.Pathlike) that supports ``open``
-        mode (str): opening mode. Either "w" or "wt" (text), or "wb" (binary). Defaults to "w".
-            Ignored if fl supports ``write``.
+        data (Dict[Any, Any]): input data
+        fl (FilePathOrObject): file like object or path
+        mode (str, optional): mode to write the file, support "w", "wt" (text) or "wb" (binary). Defaults to "w".
     """
     data = _impl.dumps(data)
     if mode == "wb":
@@ -42,29 +39,26 @@ def dump(data: Dict[Any, Any], fl: FilePathOrObject, mode: str = "w") -> None:
 
 
 def loads(data: str) -> Dict[Any, Any]:
-    """Deserialise from TOML as dictionary.
+    """Deserialise from TOML string to python dict.
 
     Args:
-        data (str): data to deserialise
+        data (str): TOML string
 
-        Returns:
-            deserialised data
+    Returns:
+        Dict[Any, Any]: deserialised data
     """
     return _impl.loads(data)
 
 
 def load(fl: FilePathOrObject, mode: str = "r") -> Dict[Any, Any]:
-    """Deserialise from TOML.
+    """Deserialise from TOML file to python dict.
 
     Args:
-        fl (io.TextIOBase, str or os.Pathlike):
-            file-object to read from (supports ``read``)
-            or a file name (str, os.Pathlike) that supports ``open``
-        mode (str):  opening mode. Either "r" or "rt" (text) or "rb" (binary). Defaults to "r".
-            Ignored if fl supports ``read``.
+        fl (FilePathOrObject): file like object or path
+        mode (str, optional): mode to read the file, support "r", "rt" (text) or "rb" (binary). Defaults to "r".
 
     Returns:
-        deserialised data
+        Dict[Any, Any]: deserialised data
     """
 
     if hasattr(fl, "read"):

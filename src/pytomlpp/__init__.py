@@ -1,4 +1,11 @@
-"""Python wrapper for Toml++."""
+"""
+
+Python wrapper for Toml++.
+
+Install from [PyPI](https://pypi.org/project/pytomlpp/)
+
+
+"""
 
 __all__ = ["DecodeError", "dumps", "loads", "dump", "load"]
 
