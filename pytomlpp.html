@@ -58,11 +58,20 @@
 pytomlpp    </h1>
 
                         <div class="docstring"><p>Python wrapper for Toml++.</p>
+
+<p>Install from <a href="https://pypi.org/project/pytomlpp/">PyPI</a></p>
 </div>
 
                         <details>
             <summary>View Source</summary>
-            <div class="codehilite"><pre><span></span><span class="sd">&quot;&quot;&quot;Python wrapper for Toml++.&quot;&quot;&quot;</span>
+            <div class="codehilite"><pre><span></span><span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">Python wrapper for Toml++.</span>
+
+<span class="sd">Install from [PyPI](https://pypi.org/project/pytomlpp/)</span>
+
+
+<span class="sd">&quot;&quot;&quot;</span>
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;DecodeError&quot;</span><span class="p">,</span> <span class="s2">&quot;dumps&quot;</span><span class="p">,</span> <span class="s2">&quot;loads&quot;</span><span class="p">,</span> <span class="s2">&quot;dump&quot;</span><span class="p">,</span> <span class="s2">&quot;load&quot;</span><span class="p">]</span>
 
@@ -113,31 +122,31 @@ pytomlpp    </h1>
                 <details>
             <summary>View Source</summary>
             <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">dumps</span><span class="p">(</span><span class="n">data</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;Serialise data to TOML as string.</span>
+    <span class="sd">&quot;&quot;&quot;Serialise data to TOML string.</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        data: data to serialise</span>
+<span class="sd">        data (Dict[Any, Any]): input data</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        serialised data</span>
+<span class="sd">        str: seralised data</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">_impl</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
 </pre></div>
 
         </details>
 
-            <div class="docstring"><p>Serialise data to TOML as string.</p>
+            <div class="docstring"><p>Serialise data to TOML string.</p>
 
 <h6 id="args">Args</h6>
 
 <ul>
-<li><strong>data:</strong>  data to serialise</li>
+<li><strong>data (Dict[Any, Any]):</strong>  input data</li>
 </ul>
 
 <h6 id="returns">Returns</h6>
 
 <blockquote>
-  <p>serialised data</p>
+  <p>str: seralised data</p>
 </blockquote>
 </div>
 
@@ -154,27 +163,32 @@ pytomlpp    </h1>
                 <details>
             <summary>View Source</summary>
             <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">loads</span><span class="p">(</span><span class="n">data</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
-    <span class="sd">&quot;&quot;&quot;Deserialise from TOML as dictionary.</span>
+    <span class="sd">&quot;&quot;&quot;Deserialise from TOML string to python dict.</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        data (str): data to deserialise</span>
+<span class="sd">        data (str): TOML string</span>
 
-<span class="sd">        Returns:</span>
-<span class="sd">            deserialised data</span>
+<span class="sd">    Returns:</span>
+<span class="sd">        Dict[Any, Any]: deserialised data</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">_impl</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
 </pre></div>
 
         </details>
 
-            <div class="docstring"><p>Deserialise from TOML as dictionary.</p>
+            <div class="docstring"><p>Deserialise from TOML string to python dict.</p>
 
 <h6 id="args">Args</h6>
 
 <ul>
-<li><strong>data (str):</strong>  data to deserialise</li>
-<li><strong>Returns:</strong>  deserialised data</li>
+<li><strong>data (str):</strong>  TOML string</li>
 </ul>
+
+<h6 id="returns">Returns</h6>
+
+<blockquote>
+  <p>Dict[Any, Any]: deserialised data</p>
+</blockquote>
 </div>
 
 
@@ -194,15 +208,12 @@ pytomlpp    </h1>
                 <details>
             <summary>View Source</summary>
             <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">dump</span><span class="p">(</span><span class="n">data</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">fl</span><span class="p">:</span> <span class="n">FilePathOrObject</span><span class="p">,</span> <span class="n">mode</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;Serialise data to TOML.</span>
+    <span class="sd">&quot;&quot;&quot;Serialise data to TOML file</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        data: data to serialise</span>
-<span class="sd">        fl (io.TextIOBase, str or os.Pathlike):</span>
-<span class="sd">            file-object to write to (supports ``write``)</span>
-<span class="sd">            or a file name (str, os.Pathlike) that supports ``open``</span>
-<span class="sd">        mode (str): opening mode. Either &quot;w&quot; or &quot;wt&quot; (text), or &quot;wb&quot; (binary). Defaults to &quot;w&quot;.</span>
-<span class="sd">            Ignored if fl supports ``write``.</span>
+<span class="sd">        data (Dict[Any, Any]): input data</span>
+<span class="sd">        fl (FilePathOrObject): file like object or path</span>
+<span class="sd">        mode (str, optional): mode to write the file, support &quot;w&quot;, &quot;wt&quot; (text) or &quot;wb&quot; (binary). Defaults to &quot;w&quot;.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">data</span> <span class="o">=</span> <span class="n">_impl</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span> <span class="s2">&quot;wb&quot;</span><span class="p">:</span>
@@ -216,16 +227,14 @@ pytomlpp    </h1>
 
         </details>
 
-            <div class="docstring"><p>Serialise data to TOML.</p>
+            <div class="docstring"><p>Serialise data to TOML file</p>
 
 <h6 id="args">Args</h6>
 
 <ul>
-<li><strong>data:</strong>  data to serialise</li>
-<li><strong>fl (io.TextIOBase, str or os.Pathlike):</strong>  file-object to write to (supports <code>write</code>)
-or a file name (str, os.Pathlike) that supports <code>open</code></li>
-<li><strong>mode (str):</strong>  opening mode. Either "w" or "wt" (text), or "wb" (binary). Defaults to "w".
-Ignored if fl supports <code>write</code>.</li>
+<li><strong>data (Dict[Any, Any]):</strong>  input data</li>
+<li><strong>fl (FilePathOrObject):</strong>  file like object or path</li>
+<li><strong>mode (str, optional):</strong>  mode to write the file, support "w", "wt" (text) or "wb" (binary). Defaults to "w".</li>
 </ul>
 </div>
 
@@ -245,17 +254,14 @@ Ignored if fl supports <code>write</code>.</li>
                 <details>
             <summary>View Source</summary>
             <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">load</span><span class="p">(</span><span class="n">fl</span><span class="p">:</span> <span class="n">FilePathOrObject</span><span class="p">,</span> <span class="n">mode</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
-    <span class="sd">&quot;&quot;&quot;Deserialise from TOML.</span>
+    <span class="sd">&quot;&quot;&quot;Deserialise from TOML file to python dict.</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        fl (io.TextIOBase, str or os.Pathlike):</span>
-<span class="sd">            file-object to read from (supports ``read``)</span>
-<span class="sd">            or a file name (str, os.Pathlike) that supports ``open``</span>
-<span class="sd">        mode (str):  opening mode. Either &quot;r&quot; or &quot;rt&quot; (text) or &quot;rb&quot; (binary). Defaults to &quot;r&quot;.</span>
-<span class="sd">            Ignored if fl supports ``read``.</span>
+<span class="sd">        fl (FilePathOrObject): file like object or path</span>
+<span class="sd">        mode (str, optional): mode to read the file, support &quot;r&quot;, &quot;rt&quot; (text) or &quot;rb&quot; (binary). Defaults to &quot;r&quot;.</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        deserialised data</span>
+<span class="sd">        Dict[Any, Any]: deserialised data</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">fl</span><span class="p">,</span> <span class="s2">&quot;read&quot;</span><span class="p">):</span>
@@ -270,21 +276,19 @@ Ignored if fl supports <code>write</code>.</li>
 
         </details>
 
-            <div class="docstring"><p>Deserialise from TOML.</p>
+            <div class="docstring"><p>Deserialise from TOML file to python dict.</p>
 
 <h6 id="args">Args</h6>
 
 <ul>
-<li><strong>fl (io.TextIOBase, str or os.Pathlike):</strong>  file-object to read from (supports <code>read</code>)
-or a file name (str, os.Pathlike) that supports <code>open</code></li>
-<li><strong>mode (str):</strong>   opening mode. Either "r" or "rt" (text) or "rb" (binary). Defaults to "r".
-Ignored if fl supports <code>read</code>.</li>
+<li><strong>fl (FilePathOrObject):</strong>  file like object or path</li>
+<li><strong>mode (str, optional):</strong>  mode to read the file, support "r", "rt" (text) or "rb" (binary). Defaults to "r".</li>
 </ul>
 
 <h6 id="returns">Returns</h6>
 
 <blockquote>
-  <p>deserialised data</p>
+  <p>Dict[Any, Any]: deserialised data</p>
 </blockquote>
 </div>
 
