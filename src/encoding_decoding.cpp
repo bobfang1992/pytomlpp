@@ -75,9 +75,9 @@ toml::array py_list_to_toml_array(const py::list &list) {
     } else {
       std::stringstream ss;
 #ifdef PYPY_VERSION
-      // see 
+      // see
       // https://github.com/conda-forge/pytomlpp-feedstock/pull/1#issuecomment-972738986
-      // and 
+      // and
       // https://github.com/pybind/pybind11/issues/3408#issuecomment-972752210
       ss << "not a valid type for conversion " << std::endl;
 #else
