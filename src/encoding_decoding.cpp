@@ -74,7 +74,14 @@ toml::array py_list_to_toml_array(const py::list &list) {
       arr.push_back(time_value);
     } else {
       std::stringstream ss;
+#ifdef PYPY_VERSION
+      // see https://github.com/conda-forge/pytomlpp-feedstock/pull/1#issuecomment-972738986
+      // and https://github.com/pybind/pybind11/issues/3408#issuecomment-972752210
+      ss << "not a valid type for conversion " << std::endl;
+#else
       ss << "not a valid type for conversion " << it << std::endl;
+#endif
+      std::cout << "uhoh, bad type" << std::endl;
       throw py::type_error(ss.str());
     }
   }

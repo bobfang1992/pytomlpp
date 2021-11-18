@@ -117,6 +117,8 @@ def test_invalid_encode():
         pass
     with pytest.raises(TypeError):
         pytomlpp.dumps({'a': A()})
+    with pytest.raises(TypeError):
+        pytomlpp.dumps({'a': [A()]})
 
 @pytest.mark.parametrize("toml_file", valid_toml_files)
 def test_decode_encode_binary(toml_file, tmp_path):
