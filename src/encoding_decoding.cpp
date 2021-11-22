@@ -73,8 +73,9 @@ toml::array py_list_to_toml_array(const py::list &list) {
       toml::time time_value = it.cast<toml::time>();
       arr.push_back(time_value);
     } else {
-      throw py::type_error(py::str("not a valid type for conversion {}").format(it));
-   }
+      throw py::type_error(
+          py::str("not a valid type for conversion {}").format(it));
+    }
   }
   return arr;
 }
