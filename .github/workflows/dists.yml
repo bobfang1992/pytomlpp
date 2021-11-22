@@ -58,7 +58,7 @@ jobs:
           # Skip building on Python 2.7
           # Additionally, skip 32-bit Windows for now as MSVC needs seperate setup with different toolchain to do this
           # Refer: https://cibuildwheel.readthedocs.io/en/stable/cpp_standards/#windows-and-python-27
-          CIBW_SKIP: cp27-* *-win32 cp35-*
+          CIBW_SKIP: "*-win32"
           CIBW_BEFORE_TEST: pip install -r tests/requirements.txt
           CIBW_TEST_COMMAND: pytest {project}/tests
           CIBW_ARCHS_MACOS: "x86_64 universal2 arm64" # build on M1 chip
