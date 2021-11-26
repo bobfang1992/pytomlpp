@@ -33,17 +33,18 @@ There are some existing python TOML parsers on the market but from my experience
 
 ```
 Parsing data.toml 5000 times:
-  pytomlpp:    0.846 s
-     tomli:    3.317 s (3.9x slower)
-      toml:    5.697 s (6.7x slower)
-     qtoml:    8.473 s (10.0x slower)
-   tomlkit:   43.250 s (51.0x slower)
+  pytomlpp:   0.694 s
+     rtoml:   0.871 s ( 1.25x)
+     tomli:   2.625 s ( 3.78x)
+      toml:   5.642 s ( 8.12x)
+     qtoml:   7.760 s (11.17x)
+   tomlkit:  32.708 s (47.09x)
 ```
 Test it for yourself using [the benchmark script](benchmark/run.py).
 
 # Installing
 
-We recommand you to use `pip` to install this package:
+We recommend you to use `pip` to install this package:
 ```sh
 pip install pytomlpp
 ```

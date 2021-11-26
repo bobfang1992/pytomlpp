@@ -3,3 +3,4 @@ toml
 tomlkit
 qtoml
 tomli
+rtoml
