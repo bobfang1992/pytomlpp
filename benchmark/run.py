@@ -1,37 +1,69 @@
-import pytomlpp
-import toml
-import tomli
-import tomlkit
-import qtoml
 import timeit
+from pathlib import Path
 
-def benchmark(name, run_count, func, compare_to=None):
-    print(f'{name:>10}: Running...', end='', flush=True)
-    time_taken = timeit.timeit(func, number=run_count)
-    res = str(time_taken).split('.')
-    print('\b'*10, end='')
-    print(f'{res[0]:>4}.{res[1][:3]} s', end='')
-    if compare_to is not None:
-        delta = time_taken / compare_to
-        relation = 'slower'
-        if delta < 1.0:
-            delta = 1.0 / delta
-            relation = 'faster'
-        delta = int(delta * 10.0) / 10.0
-        print(f' ({delta}x {relation})', end='')
-    print('')
-    return time_taken
+_parsers = []
+
+import pytomlpp
+_parsers.append(('pytomlpp', pytomlpp.loads))
+
+try:
+    import rtoml
+    _parsers.append(('rtoml', rtoml.loads))
+except ImportError:
+    print("Couldn't import 'rtoml'")
+
+try:
+    import tomli
+    _parsers.append(('tomli', tomli.loads))
+except ImportError:
+    print("Couldn't import 'tomli'")
+
+try:
+    import toml
+    _parsers.append(('toml', toml.loads))
+except ImportError:
+    print("Couldn't import 'toml'")
+
+try:
+    import qtoml
+    _parsers.append(('qtoml', qtoml.loads))
+except ImportError:
+    print("Couldn't import 'qtoml'")
+
+try:
+    import tomlkit
+    _parsers.append(('tomlkit', tomlkit.parse))
+except ImportError:
+    print("Couldn't import 'tomlkit'")
+
 
 def run(run_count = 5000):
     test_data = ''
-    with open('data.toml', 'r', encoding='utf-8') as f:
+    with open(str(Path(Path(__file__).parent, 'data.toml').resolve()), 'r', encoding='utf-8') as f:
         test_data = f.read()
+
     print(f'Parsing data.toml {run_count} times:')
-    baseline = benchmark('pytomlpp', run_count, lambda: pytomlpp.loads(test_data))
-    benchmark('tomli', run_count, lambda: tomli.loads(test_data), compare_to=baseline)
-    benchmark('toml', run_count, lambda: toml.loads(test_data), compare_to=baseline)
-    benchmark('qtoml', run_count, lambda: qtoml.loads(test_data), compare_to=baseline)
-    benchmark('tomlkit', run_count, lambda: tomlkit.parse(test_data), compare_to=baseline)
+    durations = []
+    for name, func in _parsers:
+        # pylint: disable=cell-var-from-loop
+        run_str = f'  Running {name}...'
+        print(run_str, end='', flush=True)
+        durations.append((name, timeit.timeit(lambda: func(test_data), number=run_count)))
+        print('\b'*len(run_str), end='')
+        print(' '*len(run_str), end='')
+        print('\b'*len(run_str), end='')
+
+    durations.sort(key=lambda dur: dur[1])
+    baseline = durations[0][1]
+    for name, duration in durations:
+        res = str(duration).split('.')
+        print(f'{name:>10}: {res[0]:>3}.{res[1][:3]} s', end='')
+        if duration != baseline:
+            delta = duration / baseline
+            delta = int(delta * 100.0) / 100.0
+            print(f' ({delta:>5}x)', end='')
+        print('')
+
 
 if __name__ == '__main__':
     run()
