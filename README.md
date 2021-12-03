@@ -63,3 +63,7 @@ git clone git@github.com:bobfang1992/pytomlpp.git --recurse-submodules=third_par
 cd pytomlpp
 pip install .
 ```
+
+---
+
+![Alt](https://repobeats.axiom.co/api/embed/e767bf2c29b32ec317fc591d4cafda263de6c4b0.svg "Repobeats analytics image")
