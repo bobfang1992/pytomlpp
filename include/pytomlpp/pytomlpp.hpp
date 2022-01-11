@@ -13,8 +13,7 @@
 #endif
 
 // toml++ config
-#define TOML_WINDOWS_COMPAT 0
-#define TOML_LARGE_FILES 1
+#define TOML_ENABLE_WINDOWS_COMPAT 0
 #define TOML_HEADER_ONLY 0
 #ifdef __APPLE__
 #define TOML_INT_CHARCONV 0

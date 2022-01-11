@@ -20,7 +20,7 @@ py::list toml_array_to_py_list(toml::array &&a) {
 py::dict toml_table_to_py_dict(toml::table &&t) {
   py::dict result;
   for (auto &&[key_, val_] : std::move(t)) {
-    std::move(val_).visit([&, key = key_.c_str()](auto &&val) {
+    std::move(val_).visit([&, key = key_.str().data()](auto &&val) {
       if constexpr (toml::is_table<decltype(val)>)
         result[key] = toml_table_to_py_dict(std::move(val));
       else if constexpr (toml::is_array<decltype(val)>)
@@ -99,27 +99,29 @@ toml::table py_dict_to_toml_table(const py::dict &object) {
     bool insert_ok = true;
     if (py::isinstance<py::bool_>(value)) {
       bool bool_value = value.cast<py::bool_>();
-      auto insert = t.insert_or_assign(key_string, bool_value);
+      auto insert = t.insert_or_assign(std::move(key_string), bool_value);
       insert_ok = insert.second;
     } else if (py::isinstance<py::int_>(value)) {
       int64_t int_value = value.cast<py::int_>();
-      auto insert = t.insert_or_assign(key_string, int_value);
+      auto insert = t.insert_or_assign(std::move(key_string), int_value);
       insert_ok = insert.second;
     } else if (py::isinstance<py::float_>(value)) {
       double float_value = value.cast<py::float_>();
-      auto insert = t.insert_or_assign(key_string, float_value);
+      auto insert = t.insert_or_assign(std::move(key_string), float_value);
       insert_ok = insert.second;
     } else if (py::isinstance<py::str>(value)) {
       std::string string_value = value.cast<py::str>();
-      auto insert = t.insert_or_assign(key_string, string_value);
+      auto insert = t.insert_or_assign(std::move(key_string), string_value);
       insert_ok = insert.second;
     } else if (py::isinstance<py::dict>(value)) {
       toml::table table_value = py_dict_to_toml_table(value.cast<py::dict>());
-      auto insert = t.insert_or_assign(key_string, std::move(table_value));
+      auto insert =
+          t.insert_or_assign(std::move(key_string), std::move(table_value));
       insert_ok = insert.second;
     } else if (py::isinstance<py::list>(value)) {
       toml::array array_value = py_list_to_toml_array(value.cast<py::list>());
-      auto insert = t.insert_or_assign(key_string, std::move(array_value));
+      auto insert =
+          t.insert_or_assign(std::move(key_string), std::move(array_value));
       insert_ok = insert.second;
     } else if (py::isinstance(value, datetime_class)) {
       // Order matters here.
@@ -127,15 +129,15 @@ toml::table py_dict_to_toml_table(const py::dict &object) {
       // isinstance(datetime_obj, date) --> true as well
       // so we need to test datetime first then date.
       toml::date_time date_time_value = value.cast<toml::date_time>();
-      auto insert = t.insert_or_assign(key_string, date_time_value);
+      auto insert = t.insert_or_assign(std::move(key_string), date_time_value);
       insert_ok = insert.second;
     } else if (py::isinstance(value, date_class)) {
       toml::date date_value = value.cast<toml::date>();
-      auto insert = t.insert_or_assign(key_string, date_value);
+      auto insert = t.insert_or_assign(std::move(key_string), date_value);
       insert_ok = insert.second;
     } else if (py::isinstance(value, time_class)) {
       toml::time time_value = value.cast<toml::time>();
-      auto insert = t.insert_or_assign(key_string, time_value);
+      auto insert = t.insert_or_assign(std::move(key_string), time_value);
       insert_ok = insert.second;
     } else {
       std::stringstream ss;
