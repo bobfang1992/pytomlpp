@@ -30,7 +30,7 @@ _marks = {
     for s in TOML_0_4_SPECIFIC
 }
 _valid_marks = {
-    s: (pytest.mark.skip(reson="Skipping for these tests for now"))
+    s: (pytest.mark.skip(reason="Skipping for these tests for now"))
     for s in TOML_TESTS_SKIP
 }
 valid_toml_files = [
