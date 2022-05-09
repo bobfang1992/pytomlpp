@@ -1,34 +1,32 @@
 #include <pytomlpp/pytomlpp.hpp>
 #include <pybind11/stl.h>
 
+PYTOMLPP_PUSH_OPTIMIZATIONS;
+
 namespace pytomlpp {
 py::list toml_array_to_py_list(toml::array &&a) {
-  py::list result;
-  for (auto &&val_ : std::move(a)) {
-    std::move(val_).visit([&](auto &&val) {
-      if constexpr (toml::is_table<decltype(val)>)
-        result.append(toml_table_to_py_dict(std::move(val)));
-      else if constexpr (toml::is_array<decltype(val)>)
-        result.append(toml_array_to_py_list(std::move(val)));
-      else
-        result.append(std::move(*val));
-    });
-  }
+  py::list result(a.size());
+  a.for_each([&](size_t index, auto &&val) {
+    if constexpr (toml::is_table<decltype(val)>)
+      result[index] = toml_table_to_py_dict(std::move(val));
+    else if constexpr (toml::is_array<decltype(val)>)
+      result[index] = toml_array_to_py_list(std::move(val));
+    else
+      result[index] = std::move(*val);
+  });
   return result;
 }
 
 py::dict toml_table_to_py_dict(toml::table &&t) {
   py::dict result;
-  for (auto &&[key_, val_] : std::move(t)) {
-    std::move(val_).visit([&, key = key_.str().data()](auto &&val) {
-      if constexpr (toml::is_table<decltype(val)>)
-        result[key] = toml_table_to_py_dict(std::move(val));
-      else if constexpr (toml::is_array<decltype(val)>)
-        result[key] = toml_array_to_py_list(std::move(val));
-      else
-        result[key] = std::move(*val);
-    });
-  }
+  t.for_each([&](const toml::key &key, auto &&val) {
+    if constexpr (toml::is_table<decltype(val)>)
+      result[py::str(key.str())] = toml_table_to_py_dict(std::move(val));
+    else if constexpr (toml::is_array<decltype(val)>)
+      result[py::str(key.str())] = toml_array_to_py_list(std::move(val));
+    else
+      result[py::str(key.str())] = std::move(*val);
+  });
   return result;
 }
 

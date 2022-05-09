@@ -1,11 +1,12 @@
 #define TOML_IMPLEMENTATION
-
 #include <pytomlpp/pytomlpp.hpp>
 #if PYTOMLPP_PROFILING
 #include <chrono>
 #include <iomanip>
 #include <pybind11/iostream.h>
 #endif // PYTOMLPP_PROFILING
+
+PYTOMLPP_PUSH_OPTIMIZATIONS;
 
 namespace {
 #if PYTOMLPP_PROFILING

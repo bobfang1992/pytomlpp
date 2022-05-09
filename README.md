@@ -33,13 +33,13 @@ Out[6]: '"你好" = "world"'
 There are some existing python TOML parsers on the market but from my experience they are implemented purely in python which is a bit slow.
 
 ```
-Parsing data.toml 5000 times:
-  pytomlpp:   0.694 s
-     rtoml:   0.871 s ( 1.25x)
-     tomli:   2.625 s ( 3.78x)
-      toml:   5.642 s ( 8.12x)
-     qtoml:   7.760 s (11.17x)
-   tomlkit:  32.708 s (47.09x)
+Parsing data.toml 1000 times:
+  pytomlpp:   0.914 s
+     rtoml:   1.148 s ( 1.25x)
+     tomli:   4.850 s ( 5.30x)
+     qtoml:  11.882 s (12.99x)
+   tomlkit:  72.140 s (78.89x)
+      toml: Parsing failed. Likely not TOML 1.0.0-compliant.
 ```
 Test it for yourself using [the benchmark script](benchmark/run.py).
 

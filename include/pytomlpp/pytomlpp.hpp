@@ -23,12 +23,17 @@
 #endif
 
 // common includes
+#include <string>
+#include <sstream>
+#include <exception>
+#include <pybind11/pybind11.h>
 #if PYTOMLPP_USE_TL_OPTIONAL
 #include <optional.hpp>
 #endif
-#include <pybind11/pybind11.h>
-#include <sstream>
+#include "compilers.hpp"
+PYTOMLPP_PUSH_OPTIMIZATIONS;
 #include <tomlplusplus/include/toml++/toml.h>
+PYTOMLPP_POP_OPTIMIZATIONS;
 
 // namespace and type forward declarations
 namespace py = pybind11;
