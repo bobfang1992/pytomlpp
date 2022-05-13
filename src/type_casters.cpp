@@ -1,6 +1,8 @@
 #include <pytomlpp/pytomlpp.hpp>
 #include <datetime.h>
 
+PYTOMLPP_PUSH_OPTIMIZATIONS;
+
 namespace {
 void lazy_init_py_date_time() noexcept {
   if (PyDateTimeAPI)
