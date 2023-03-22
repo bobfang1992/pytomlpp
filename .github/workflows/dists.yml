@@ -29,11 +29,11 @@ jobs:
     runs-on: ${{ matrix.os }}
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           submodules: true
 
-      - uses: actions/setup-python@v2
+      - uses: actions/setup-python@v3
         name: Install Python
         with:
           python-version: 3.9
@@ -65,7 +65,7 @@ jobs:
         run: |
           python -m cibuildwheel --output-dir dist
 
-      - uses: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@v3
         # All files are uploaded to the same location. Same-name files will be
         # overwritten (fine for wheels, where same-name should mean same-data)
         with:
@@ -77,11 +77,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           submodules: true
 
-      - uses: actions/setup-python@v2
+      - uses: actions/setup-python@v3
         name: Install Python
         with:
           python-version: 3.9
@@ -90,7 +90,7 @@ jobs:
         run: |
           ./setup.py sdist
 
-      - uses: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@v3
         with:
           name: dist
           path: ./dist
@@ -99,7 +99,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - uses: DoozyX/clang-format-lint-action@v0.12
         with:
           source: "./include ./src"
