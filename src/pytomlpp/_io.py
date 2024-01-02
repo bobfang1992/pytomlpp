@@ -1,7 +1,7 @@
 """Python wrapper for Toml++ IO methods."""
 
 import os
-from typing import Any, BinaryIO, Dict, TextIO, Union, Optional
+from typing import Any, BinaryIO, Dict, TextIO, Union
 
 from . import _impl
 
@@ -20,14 +20,13 @@ def dumps(data: Dict[Any, Any]) -> str:
     return _impl.dumps(data)
 
 
-def dump(data: Dict[Any, Any], fl: FilePathOrObject, mode: str = "w", encoding: Optional[str] = "utf-8") -> None:
+def dump(data: Dict[Any, Any], fl: FilePathOrObject, mode: str = "w") -> None:
     """Serialise data to TOML file
 
     Args:
         data (Dict[Any, Any]): input data
         fl (FilePathOrObject): file like object or path
         mode (str, optional): mode to write the file, support "w", "wt" (text) or "wb" (binary). Defaults to "w".
-        encoding (str): defaults to utf-8, if None, local encoding is selected.
     """
     data = _impl.dumps(data)
     if mode == "wb":
@@ -35,7 +34,7 @@ def dump(data: Dict[Any, Any], fl: FilePathOrObject, mode: str = "w", encoding: 
     if hasattr(fl, "write"):
         fl.write(data)
         return
-    with open(fl, mode=mode, encoding=encoding or None) as fh:
+    with open(fl, mode=mode) as fh:
         fh.write(data)
 
 
@@ -51,7 +50,7 @@ def loads(data: str) -> Dict[Any, Any]:
     return _impl.loads(data)
 
 
-def load(fl: FilePathOrObject, mode: str = "r", encoding: Optional[str] = "utf-8") -> Dict[Any, Any]:
+def load(fl: FilePathOrObject, mode: str = "r") -> Dict[Any, Any]:
     """Deserialise from TOML file to python dict.
 
     Args:
@@ -65,7 +64,7 @@ def load(fl: FilePathOrObject, mode: str = "r", encoding: Optional[str] = "utf-8
     if hasattr(fl, "read"):
         data = fl.read()
     else:
-        with open(fl, mode=mode, encoding=encoding or None) as fh:
+        with open(fl, mode=mode) as fh:
             data = fh.read()
     if isinstance(data, bytes):
         return _impl.loads(data.decode("utf-8"))
