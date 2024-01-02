@@ -33,7 +33,7 @@ def dump(data: Dict[Any, Any], fl: FilePathOrObject, mode: str = "w", encoding: 
     data = _impl.dumps(data)
     if mode == "wb":
         encoding = None
-        data = data.encode("utf-8")
+        data     = data.encode("utf-8")
     if hasattr(fl, "write"):
         fl.write(data)
         return
