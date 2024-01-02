@@ -1,10 +1,9 @@
 import timeit
 from pathlib import Path
 
-_parsers = []
+_parsers = [('pytomlpp', pytomlpp.loads)]
 
 import pytomlpp
-_parsers.append(('pytomlpp', pytomlpp.loads))
 
 try:
     import rtoml
