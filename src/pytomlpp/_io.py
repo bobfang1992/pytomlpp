@@ -27,7 +27,7 @@ def dump(data: Dict[Any, Any], fl: FilePathOrObject, mode: str = "w", encoding: 
         data (Dict[Any, Any]): input data
         fl (FilePathOrObject): file like object or path
         mode (str, optional): mode to write the file, support "w", "wt" (text) or "wb" (binary). Defaults to "w".
-        encoding (str): defaults to None. Local enconding will be selected with``locale.getpreferredencoding(False)``
+        encoding (str): defaults to None. If None, local enconding will be selected. 
         NOTE: ``If mode is binary mode, encoding optional argument will be negligible.``
     """
     data = _impl.dumps(data)
@@ -38,7 +38,6 @@ def dump(data: Dict[Any, Any], fl: FilePathOrObject, mode: str = "w", encoding: 
         return
     with open(fl, mode=mode, encoding=encoding) as fh:
        fh.write(data)
-
 
 
 def loads(data: str) -> Dict[Any, Any]:
@@ -59,7 +58,7 @@ def load(fl: FilePathOrObject, mode: str = "r", encoding: Optional[str] = None) 
     Args:
         fl (FilePathOrObject): file like object or path
         mode (str, optional): mode to read the file, support "r", "rt" (text) or "rb" (binary). Defaults to "r".
-        encoding (str): defaults to None. Local enconding will be selected with ``locale.getpreferredencoding(False)`` . 
+        encoding (str): defaults to None. If None, local enconding will be selected. 
         NOTE: ``If mode is binary mode, encoding optional argument will be negligible.``
           
     Returns:

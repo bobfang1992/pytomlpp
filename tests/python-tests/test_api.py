@@ -11,7 +11,6 @@ except ImportError:
 
 from dateutil import parser as dateutil_parser
 
-# import pytomlpp
 import pytomlpp
 
 TOML_TESTS_SKIP = [
