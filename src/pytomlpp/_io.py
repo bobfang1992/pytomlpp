@@ -59,6 +59,7 @@ def load(fl: FilePathOrObject, mode: str = "r", encoding: Optional[str] = "utf-8
     Args:
         fl (FilePathOrObject): file like object or path
         mode (str, optional): mode to read the file, support "r", "rt" (text) or "rb" (binary). Defaults to "r".
+        encoding (str): defaults to utf-8, if None, local encoding is selected. 
         NOTE: ``If mode is binary mode, encoding optional argument will be negligible.``
 
     Returns:
