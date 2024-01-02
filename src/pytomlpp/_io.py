@@ -37,7 +37,7 @@ def dump(data: Dict[Any, Any], fl: FilePathOrObject, mode: str = "w", encoding: 
         fl.write(data)
         return
     with open(fl, mode=mode, encoding=encoding) as fh:
-       fh.write(data)
+        fh.write(data)
 
 
 def loads(data: str) -> Dict[Any, Any]:
