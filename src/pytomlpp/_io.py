@@ -1,7 +1,7 @@
 """Python wrapper for Toml++ IO methods."""
 
 import os
-from typing import Any, BinaryIO, Dict, TextIO, Union
+from typing import Any, BinaryIO, Dict, TextIO, Union, Optional
 
 from . import _impl
 
@@ -20,21 +20,24 @@ def dumps(data: Dict[Any, Any]) -> str:
     return _impl.dumps(data)
 
 
-def dump(data: Dict[Any, Any], fl: FilePathOrObject, mode: str = "w") -> None:
+def dump(data: Dict[Any, Any], fl: FilePathOrObject, mode: str = "w", encoding: Optional[str] = "utf-8") -> None:
     """Serialise data to TOML file
 
     Args:
         data (Dict[Any, Any]): input data
         fl (FilePathOrObject): file like object or path
         mode (str, optional): mode to write the file, support "w", "wt" (text) or "wb" (binary). Defaults to "w".
+        encoding (str): defaults to utf-8, if None, local encoding is selected. 
+        NOTE: ``If mode is binary mode, encoding optional argument will be negligible.``
     """
     data = _impl.dumps(data)
     if mode == "wb":
+        enconding = None
         data = data.encode("utf-8")
     if hasattr(fl, "write"):
         fl.write(data)
         return
-    with open(fl, mode=mode) as fh:
+    with open(fl, mode=mode, encoding=encoding) as fh:
         fh.write(data)
 
 
@@ -50,21 +53,23 @@ def loads(data: str) -> Dict[Any, Any]:
     return _impl.loads(data)
 
 
-def load(fl: FilePathOrObject, mode: str = "r") -> Dict[Any, Any]:
+def load(fl: FilePathOrObject, mode: str = "r", encoding: Optional[str] = "utf-8") -> Dict[Any, Any]:
     """Deserialise from TOML file to python dict.
 
     Args:
         fl (FilePathOrObject): file like object or path
         mode (str, optional): mode to read the file, support "r", "rt" (text) or "rb" (binary). Defaults to "r".
+        NOTE: ``If mode is binary mode, encoding optional argument will be negligible.``
 
     Returns:
         Dict[Any, Any]: deserialised data
     """
-
+    if mode == "rb":
+        encoding = None
     if hasattr(fl, "read"):
         data = fl.read()
     else:
-        with open(fl, mode=mode) as fh:
+        with open(fl, mode=mode, encoding=encoding) as fh:
             data = fh.read()
     if isinstance(data, bytes):
         return _impl.loads(data.decode("utf-8"))
