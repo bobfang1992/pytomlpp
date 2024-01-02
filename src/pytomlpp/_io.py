@@ -20,7 +20,7 @@ def dumps(data: Dict[Any, Any]) -> str:
     return _impl.dumps(data)
 
 
-def dump(data: Dict[Any, Any], fl: FilePathOrObject, mode: str = "w", encoding: Optional[str] = "utf-8") -> None:
+def dump(data: Dict[Any, Any], fl: FilePathOrObject, mode: str = "w", encoding: Optional[str] = None) -> None:
     """Serialise data to TOML file
 
     Args:
@@ -32,7 +32,6 @@ def dump(data: Dict[Any, Any], fl: FilePathOrObject, mode: str = "w", encoding: 
     """
     data = _impl.dumps(data)
     if mode == "wb":
-        encoding = None
         data = data.encode("utf-8")
     if hasattr(fl, "write"):
         fl.write(data)
@@ -54,7 +53,7 @@ def loads(data: str) -> Dict[Any, Any]:
     return _impl.loads(data)
 
 
-def load(fl: FilePathOrObject, mode: str = "r", encoding: Optional[str] = "utf-8") -> Dict[Any, Any]:
+def load(fl: FilePathOrObject, mode: str = "r", encoding: Optional[str] = None) -> Dict[Any, Any]:
     """Deserialise from TOML file to python dict.
 
     Args:
@@ -66,8 +65,6 @@ def load(fl: FilePathOrObject, mode: str = "r", encoding: Optional[str] = "utf-8
     Returns:
         Dict[Any, Any]: deserialised data
     """
-    if mode == "rb":
-        encoding = None
     if hasattr(fl, "read"):
         data = fl.read()
     else:
