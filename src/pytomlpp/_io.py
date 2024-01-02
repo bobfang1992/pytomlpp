@@ -28,7 +28,7 @@ def dump(data: Dict[Any, Any], fl: FilePathOrObject, mode: str = "w", encoding: 
         fl (FilePathOrObject): file like object or path
         mode (str, optional): mode to write the file, support "w", "wt" (text) or "wb" (binary). Defaults to "w".
         encoding (str): defaults to utf-8, if None, local encoding is selected. 
-        NOTE: ``Binary mode does not take enconding argument.``
+        NOTE: ``If mode is binary mode, encoding optional argument will be negligible.``
     """
     data = _impl.dumps(data)
     if mode == "wb":
@@ -59,6 +59,7 @@ def load(fl: FilePathOrObject, mode: str = "r", encoding: Optional[str] = "utf-8
     Args:
         fl (FilePathOrObject): file like object or path
         mode (str, optional): mode to read the file, support "r", "rt" (text) or "rb" (binary). Defaults to "r".
+        NOTE: ``If mode is binary mode, encoding optional argument will be negligible.``
 
     Returns:
         Dict[Any, Any]: deserialised data
