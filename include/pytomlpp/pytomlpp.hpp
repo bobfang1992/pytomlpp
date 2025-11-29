@@ -21,6 +21,12 @@
 #if PYTOMLPP_USE_TL_OPTIONAL
 #define TOML_OPTIONAL_TYPE tl::optional
 #endif
+// Workaround for MSVC "legacy lambda processor" bug causing error C2057
+// Disables conditional noexcept in lambdas which MSVC's legacy lambda processor
+// cannot handle See: https://github.com/marzer/tomlplusplus/issues
+#ifdef _MSC_VER
+#define TOML_DISABLE_CONDITIONAL_NOEXCEPT_LAMBDA 1
+#endif
 
 // common includes
 #include <string>
