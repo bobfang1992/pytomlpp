@@ -66,10 +66,8 @@ jobs:
           python -m cibuildwheel --output-dir dist
 
       - uses: actions/upload-artifact@v4
-        # All files are uploaded to the same location. Same-name files will be
-        # overwritten (fine for wheels, where same-name should mean same-data)
         with:
-          name: dist
+          name: dist-${{ matrix.os }}
           path: ./dist
 
   build-sdist:
@@ -96,7 +94,7 @@ jobs:
 
       - uses: actions/upload-artifact@v4
         with:
-          name: dist
+          name: dist-sdist
           path: ./dist
 
   lint:
@@ -111,13 +109,14 @@ jobs:
 
   publish:
     runs-on: ubuntu-latest
-    needs: [build]
+    needs: [build, build-sdist]
     if: github.event_name == 'push' && startsWith(github.event.ref, 'refs/tags/')
     steps:
       - uses: actions/download-artifact@v4.1.7
         with:
-          name: dist
+          pattern: dist-*
           path: dist/
+          merge-multiple: true
       - name: Publish to PyPI
         uses: pypa/gh-action-pypi-publish@master
         with:
