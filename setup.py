@@ -1,4 +1,10 @@
 #!/usr/bin/env python3
+"""
+C++ Extension Build Configuration
+
+This file is used by setuptools to build the C++ extension module.
+All project metadata is defined in pyproject.toml (PEP 621).
+"""
 
 import os
 import glob

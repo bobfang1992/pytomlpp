@@ -1,0 +1,49 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel", "pybind11>=2.10,<3.0"]
+build-backend = "setuptools.build_meta"
+
+# Note: setup.py is still used for C++ extension configuration
+# All project metadata is in this pyproject.toml file
+
+[project]
+name = "pytomlpp"
+version = "1.1.0"
+description = "A python wrapper for toml++"
+readme = "README.md"
+license = {text = "MIT"}
+authors = [
+    {name = "Bob Fang", email = "bob.fang.london@gmail.com"}
+]
+requires-python = ">=3.8"
+keywords = ["toml", "parser", "serialization", "deserialization", "serdes", "c++", "pybind11", "fast", "native"]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+    "Intended Audience :: Developers",
+    "Natural Language :: English",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: Utilities",
+    "Typing :: Typed",
+]
+
+[project.urls]
+Source = "https://github.com/bobfang1992/pytomlpp"
+Tracker = "https://github.com/bobfang1992/pytomlpp/issues"
+
+[tool.setuptools]
+zip-safe = false
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+"*" = ["*.pyi", "py.typed"]
