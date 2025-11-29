@@ -24,6 +24,7 @@
 // Workaround for MSVC "legacy lambda processor" bug causing error C2057
 // See: https://github.com/marzer/tomlplusplus/issues
 #ifdef _MSC_VER
+#define TOML_RETURN_BOOL_FROM_FOR_EACH_BROKEN 1
 #define TOML_RETURN_BOOL_FROM_FOR_EACH_BROKEN_ACKNOWLEDGED
 #endif
 
